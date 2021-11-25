@@ -1,0 +1,94 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright 2021 Technexion Ltd.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include "imx8mp-evk.dts"
+
+&i2c2 {
+	ov5640_0: ov5640_mipi@3c {
+		status = "disabled";
+	};
+};
+
+&i2c3 {
+	clock-frequency = <400000>;
+	/delete-node/ ov5640_mipi@3c;
+
+	tevi_ar0234_otp_1: tevi_ar0234_otp@54 {
+		compatible = "atmel,24c1024";
+		reg = <0x54>;
+		//read-only;
+	};
+
+	tevi_ar0234_1: tevi_ar0234@3d {
+		compatible = "tn,tevi-ar0234";
+		reg = <0x3d>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>, <&pinctrl_csi_mclk>;
+		host-power-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+		reset-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
+		device-power-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+		standby-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
+		nvmem = <&tevi_ar0234_otp_1>;
+		nvmem-names = "calib-data";
+		status = "okay";
+
+		port {
+			tevi_ar0234_1_ep: endpoint {
+				remote-endpoint = <&mipi_csi1_ep>;
+			};
+		};
+	};
+};
+
+&mipi_csi_0 {
+	status = "disabled";
+};
+
+&mipi_csi_1 {
+	status = "okay";
+
+	port@1 {
+		endpoint {
+			remote-endpoint = <&tevi_ar0234_1_ep>;
+			data-lanes = <4>;
+			csis-hs-settle = <13>;
+			csis-clk-settle = <2>;
+			csis-wclk;
+		};
+	};
+};
+
+&isi_0 {
+	status = "disabled";
+};
+
+&isi_1 {
+	status = "okay";
+};
+
+&iomuxc {
+	pinctrl_csi0_pwn: csi0_pwn_grp {
+		fsl,pins = <
+			MX8MP_IOMUXC_SD1_STROBE__GPIO2_IO11	0x9 /* CSI1_PWDN for host-power-gpios */
+			MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07	0x9 /* INFO_TRIG_IN1 for standby-gpios */
+		>;
+	};
+
+	pinctrl_csi_mclk: csi_mclk_grp {
+	fsl,pins = <
+		MX8MP_IOMUXC_GPIO1_IO15__GPIO1_IO15	0x9
+		>;
+	};
+};

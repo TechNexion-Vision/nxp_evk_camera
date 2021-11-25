@@ -1,0 +1,32 @@
+From 9256d3847903f72c75dd765b834f4f3b0d34c03c Mon Sep 17 00:00:00 2001
+From: Richard Hu <richard.hu@technexion.com>
+Date: Fri, 27 Aug 2021 15:07:09 +0800
+Subject: [PATCH 03/17] media: ov5640: fix issue that the chip id reade from
+ OV5640 is wrong
+
+Add 2ms delay after switching on OV5640 power to wait OV5640 become stable, then read chip id.
+
+Error message:
+-------------------------------------------------------------------------------------
+ov5640 1-003c: ov5640_check_chip_id: wrong chip identifier, expected 0x5640, got 0x40
+-------------------------------------------------------------------------------------
+---
+ drivers/media/i2c/ov5640.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index d59f860605fd..7667a5751bd0 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -3185,6 +3185,8 @@ static int ov5640_check_chip_id(struct ov5640_dev *sensor)
+ 	if (ret)
+ 		return ret;
+ 
++	msleep(2);
++
+ 	ret = ov5640_read_reg16(sensor, OV5640_REG_CHIP_ID, &chip_id);
+ 	if (ret) {
+ 		dev_err(&client->dev, "%s: failed to read chip identifier\n",
+-- 
+2.25.1
+

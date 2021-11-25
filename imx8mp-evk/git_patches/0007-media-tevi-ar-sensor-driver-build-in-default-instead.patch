@@ -1,0 +1,602 @@
+From 90a0a66646ea18c246640675a212b72c77672ca8 Mon Sep 17 00:00:00 2001
+From: Leo Wang <leo.wang@technexion.com>
+Date: Thu, 14 Oct 2021 18:18:45 +0800
+Subject: [PATCH 07/17] media: tevi-ar* sensor: driver build-in default instead
+ of module
+
+---
+ drivers/media/i2c/Kconfig                 |  6 +++---
+ drivers/media/i2c/tevi-ar0144/main.c      | 22 +++++++++----------
+ drivers/media/i2c/tevi-ar0144/otp_flash.c | 26 +++++++++++------------
+ drivers/media/i2c/tevi-ar0144/otp_flash.h | 10 ++++-----
+ drivers/media/i2c/tevi-ar0234/main.c      | 22 +++++++++----------
+ drivers/media/i2c/tevi-ar0234/otp_flash.c | 26 +++++++++++------------
+ drivers/media/i2c/tevi-ar0234/otp_flash.h | 10 ++++-----
+ drivers/media/i2c/tevi-ar0521/main.c      | 22 +++++++++----------
+ drivers/media/i2c/tevi-ar0521/otp_flash.c | 26 +++++++++++------------
+ drivers/media/i2c/tevi-ar0521/otp_flash.h | 10 ++++-----
+ 10 files changed, 90 insertions(+), 90 deletions(-)
+
+diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+index bd7e0103cea8..2fe51e2d44c5 100644
+--- a/drivers/media/i2c/Kconfig
++++ b/drivers/media/i2c/Kconfig
+@@ -1250,7 +1250,7 @@ config VIDEO_TEVI_AR0521
+ 	depends on OF
+ 	depends on GPIOLIB && VIDEO_V4L2 && I2C && VIDEO_V4L2_SUBDEV_API
+ 	depends on MEDIA_CAMERA_SUPPORT
+-	default m
++	default y
+ 	select V4L2_FWNODE
+ 	help
+ 	  This is a Video4Linux2 sensor driver for the TechNexion
+@@ -1261,7 +1261,7 @@ config VIDEO_TEVI_AR0144
+ 	depends on OF
+ 	depends on GPIOLIB && VIDEO_V4L2 && I2C && VIDEO_V4L2_SUBDEV_API
+ 	depends on MEDIA_CAMERA_SUPPORT
+-	default m
++	default y
+ 	select V4L2_FWNODE
+ 	help
+ 	  This is a Video4Linux2 sensor driver for the TechNexion
+@@ -1272,7 +1272,7 @@ config VIDEO_TEVI_AR0234
+ 	depends on OF
+ 	depends on GPIOLIB && VIDEO_V4L2 && I2C && VIDEO_V4L2_SUBDEV_API
+ 	depends on MEDIA_CAMERA_SUPPORT
+-	default m
++	default y
+ 	select V4L2_FWNODE
+ 	help
+ 	  This is a Video4Linux2 sensor driver for the TechNexion
+diff --git a/drivers/media/i2c/tevi-ar0144/main.c b/drivers/media/i2c/tevi-ar0144/main.c
+index d02c507e0c99..eb19c9082353 100644
+--- a/drivers/media/i2c/tevi-ar0144/main.c
++++ b/drivers/media/i2c/tevi-ar0144/main.c
+@@ -28,7 +28,7 @@ struct resolution {
+ 	u16 height;
+ };
+ 
+-struct resolution res_list[] = {
++static struct resolution res_list[] = {
+ 	{.width = 1280, .height = 800},
+ };
+ 
+@@ -479,12 +479,12 @@ static int sensor_load_bootdata(struct sensor *instance)
+ 		return -EINVAL;
+ 	}
+ 
+-	checksum = otp_flash_get_checksum(instance->otp_flash_instance);
++	checksum = ar0144_otp_flash_get_checksum(instance->otp_flash_instance);
+ 
+ 	//load pll
+ 	bootdata_temp_area[0] = cpu_to_be16(BOOT_DATA_START_REG);
+-	pll_len = len = otp_flash_get_pll_section(instance->otp_flash_instance,
+-						  (u8 *)(&bootdata_temp_area[1]));
++	pll_len = len = ar0144_otp_flash_get_pll_section(instance->otp_flash_instance,
++							 (u8 *)(&bootdata_temp_area[1]));
+ 	dev_dbg(dev, "pll len [%zu]\n", len);
+ 	sensor_i2c_write_bust(instance->i2c_client, (u8 *)bootdata_temp_area,
+ 			      len + 2);
+@@ -493,9 +493,9 @@ static int sensor_load_bootdata(struct sensor *instance)
+ 
+ 	//load bootdata part1
+ 	bootdata_temp_area[0] = cpu_to_be16(BOOT_DATA_START_REG + pll_len);
+-	len = otp_flash_read(instance->otp_flash_instance,
+-			     (u8 *)(&bootdata_temp_area[1]),
+-			     pll_len, BOOT_DATA_WRITE_LEN - pll_len);
++	len = ar0144_otp_flash_read(instance->otp_flash_instance,
++				    (u8 *)(&bootdata_temp_area[1]),
++				    pll_len, BOOT_DATA_WRITE_LEN - pll_len);
+ 	dev_dbg(dev, "len [%zu]\n", len);
+ 	sensor_i2c_write_bust(instance->i2c_client,
+ 			      (u8 *)bootdata_temp_area,
+@@ -505,9 +505,9 @@ static int sensor_load_bootdata(struct sensor *instance)
+ 	index = len = BOOT_DATA_WRITE_LEN;
+ 	while(!(len < BOOT_DATA_WRITE_LEN)) {
+ 		bootdata_temp_area[0] = cpu_to_be16(BOOT_DATA_START_REG);
+-		len = otp_flash_read(instance->otp_flash_instance,
+-				     (u8 *)(&bootdata_temp_area[1]),
+-				     index, BOOT_DATA_WRITE_LEN);
++		len = ar0144_otp_flash_read(instance->otp_flash_instance,
++					    (u8 *)(&bootdata_temp_area[1]),
++					    index, BOOT_DATA_WRITE_LEN);
+ 		dev_dbg(dev, "len [%zu]\n", len);
+ 		sensor_i2c_write_bust(instance->i2c_client,
+ 				      (u8 *)bootdata_temp_area,
+@@ -573,7 +573,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
+ 		return -EINVAL;
+ 	}
+ 
+-	instance->otp_flash_instance = otp_flash_init(dev);
++	instance->otp_flash_instance = ar0144_otp_flash_init(dev);
+ 	if(IS_ERR(instance->otp_flash_instance)) {
+ 		dev_err(dev, "otp flash init failed\n");
+ 		return -EINVAL;
+diff --git a/drivers/media/i2c/tevi-ar0144/otp_flash.c b/drivers/media/i2c/tevi-ar0144/otp_flash.c
+index 3ebbf0aca206..25d4347345c1 100644
+--- a/drivers/media/i2c/tevi-ar0144/otp_flash.c
++++ b/drivers/media/i2c/tevi-ar0144/otp_flash.c
+@@ -10,17 +10,17 @@ struct otp_flash {
+ #ifdef __FAKE__
+ #include "bootdata.h"
+ 
+-struct otp_flash *otp_flash_init(struct device *dev)
++struct otp_flash *ar0144_otp_flash_init(struct device *dev)
+ {
+ 	return NULL;
+ }
+ 
+-u16 otp_flash_get_checksum(struct otp_flash *instance)
++u16 ar0144_otp_flash_get_checksum(struct otp_flash *instance)
+ {
+ 	return BOOTDATA_CHECKSUM;
+ }
+ 
+-size_t otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len)
++size_t ar0144_otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len)
+ {
+ 	size_t l;
+ 
+@@ -33,14 +33,14 @@ size_t otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len
+ 	return l;
+ }
+ 
+-size_t otp_flash_get_pll_length(struct otp_flash *instance)
++size_t ar0144_otp_flash_get_pll_length(struct otp_flash *instance)
+ {
+ 	return BOOTDATA_PLL_INIT_SIZE;
+ }
+ 
+-size_t otp_flash_get_pll_section(struct otp_flash *instance, u8 *data)
++size_t ar0144_otp_flash_get_pll_section(struct otp_flash *instance, u8 *data)
+ {
+-	otp_flash_read(instance, data, 0, BOOTDATA_PLL_INIT_SIZE);
++	ar0144_otp_flash_read(instance, data, 0, BOOTDATA_PLL_INIT_SIZE);
+ 	return BOOTDATA_PLL_INIT_SIZE;
+ }
+ #else
+@@ -72,7 +72,7 @@ struct header_ver2 {
+ 	u16 pll_bootdata_len;
+ } __attribute__((packed));
+ 
+-struct otp_flash *otp_flash_init(struct device *dev)
++struct otp_flash *ar0144_otp_flash_init(struct device *dev)
+ {
+ 	struct otp_flash *instance;
+ 	u8 __header_ver;
+@@ -126,7 +126,7 @@ struct otp_flash *otp_flash_init(struct device *dev)
+ 	return ERR_PTR(-EINVAL);
+ }
+ 
+-u16 otp_flash_get_checksum(struct otp_flash *instance)
++u16 ar0144_otp_flash_get_checksum(struct otp_flash *instance)
+ {
+ 	struct header_ver2 *header;
+ 
+@@ -138,7 +138,7 @@ u16 otp_flash_get_checksum(struct otp_flash *instance)
+ 	return 0xffff;
+ }
+ 
+-size_t otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len)
++size_t ar0144_otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len)
+ {
+ 	u8 *temp;
+ 	struct header_ver2 *header;
+@@ -162,7 +162,7 @@ size_t otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len
+ 	return 0;
+ }
+ 
+-size_t otp_flash_get_pll_length(struct otp_flash *instance)
++size_t ar0144_otp_flash_get_pll_length(struct otp_flash *instance)
+ {
+ 	u8 *temp;
+ 	struct header_ver2 *header;
+@@ -176,7 +176,7 @@ size_t otp_flash_get_pll_length(struct otp_flash *instance)
+ 	return 0;
+ }
+ 
+-size_t otp_flash_get_pll_section(struct otp_flash *instance, u8 *data)
++size_t ar0144_otp_flash_get_pll_section(struct otp_flash *instance, u8 *data)
+ {
+ 	u8 *temp;
+ 	struct header_ver2 *header;
+@@ -185,8 +185,8 @@ size_t otp_flash_get_pll_section(struct otp_flash *instance, u8 *data)
+ 	if(temp[0] == 2) {
+ 		header = (struct header_ver2 *)instance->header_data;
+ 		if (header->pll_bootdata_len != 0) {
+-			otp_flash_read(instance, data, 0,
+-				       header->pll_bootdata_len);
++			ar0144_otp_flash_read(instance, data, 0,
++					      header->pll_bootdata_len);
+ 		}
+ 		return header->pll_bootdata_len;
+ 	}
+diff --git a/drivers/media/i2c/tevi-ar0144/otp_flash.h b/drivers/media/i2c/tevi-ar0144/otp_flash.h
+index eddc2e6f3b98..3770ad609c02 100644
+--- a/drivers/media/i2c/tevi-ar0144/otp_flash.h
++++ b/drivers/media/i2c/tevi-ar0144/otp_flash.h
+@@ -8,10 +8,10 @@
+ #define BOOT_DATA_WRITE_LEN (BOOT_DATA_END_REG - BOOT_DATA_START_REG + 1)
+ 
+ struct otp_flash;
+-struct otp_flash *otp_flash_init(struct device *dev);
+-u16 otp_flash_get_checksum(struct otp_flash *instance);
+-size_t otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len);
+-size_t otp_flash_get_pll_length(struct otp_flash *instance);
+-size_t otp_flash_get_pll_section(struct otp_flash*instance, u8 *data);
++struct otp_flash *ar0144_otp_flash_init(struct device *dev);
++u16 ar0144_otp_flash_get_checksum(struct otp_flash *instance);
++size_t ar0144_otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len);
++size_t ar0144_otp_flash_get_pll_length(struct otp_flash *instance);
++size_t ar0144_otp_flash_get_pll_section(struct otp_flash*instance, u8 *data);
+ 
+ #endif
+diff --git a/drivers/media/i2c/tevi-ar0234/main.c b/drivers/media/i2c/tevi-ar0234/main.c
+index b77e770bbebf..d41682a7b752 100644
+--- a/drivers/media/i2c/tevi-ar0234/main.c
++++ b/drivers/media/i2c/tevi-ar0234/main.c
+@@ -28,7 +28,7 @@ struct resolution {
+ 	u16 height;
+ };
+ 
+-struct resolution res_list[] = {
++static struct resolution res_list[] = {
+ 	{.width = 1920, .height = 1200},
+ 	{.width = 1920, .height = 1080},
+ 	{.width = 1280, .height = 720},
+@@ -501,12 +501,12 @@ static int sensor_load_bootdata(struct sensor *instance)
+ 		return -EINVAL;
+ 	}
+ 
+-	checksum = otp_flash_get_checksum(instance->otp_flash_instance);
++	checksum = ar0234_otp_flash_get_checksum(instance->otp_flash_instance);
+ 
+ 	//load pll
+ 	bootdata_temp_area[0] = cpu_to_be16(BOOT_DATA_START_REG);
+-	pll_len = len = otp_flash_get_pll_section(instance->otp_flash_instance,
+-						  (u8 *)(&bootdata_temp_area[1]));
++	pll_len = len = ar0234_otp_flash_get_pll_section(instance->otp_flash_instance,
++							 (u8 *)(&bootdata_temp_area[1]));
+ 	dev_dbg(dev, "pll len [%zu]\n", len);
+ 	sensor_i2c_write_bust(instance->i2c_client, (u8 *)bootdata_temp_area,
+ 			      len + 2);
+@@ -515,9 +515,9 @@ static int sensor_load_bootdata(struct sensor *instance)
+ 
+ 	//load bootdata part1
+ 	bootdata_temp_area[0] = cpu_to_be16(BOOT_DATA_START_REG + pll_len);
+-	len = otp_flash_read(instance->otp_flash_instance,
+-			     (u8 *)(&bootdata_temp_area[1]),
+-			     pll_len, BOOT_DATA_WRITE_LEN - pll_len);
++	len = ar0234_otp_flash_read(instance->otp_flash_instance,
++				    (u8 *)(&bootdata_temp_area[1]),
++				    pll_len, BOOT_DATA_WRITE_LEN - pll_len);
+ 	dev_dbg(dev, "len [%zu]\n", len);
+ 	sensor_i2c_write_bust(instance->i2c_client,
+ 			      (u8 *)bootdata_temp_area,
+@@ -527,9 +527,9 @@ static int sensor_load_bootdata(struct sensor *instance)
+ 	index = len = BOOT_DATA_WRITE_LEN;
+ 	while(!(len < BOOT_DATA_WRITE_LEN)) {
+ 		bootdata_temp_area[0] = cpu_to_be16(BOOT_DATA_START_REG);
+-		len = otp_flash_read(instance->otp_flash_instance,
+-				     (u8 *)(&bootdata_temp_area[1]),
+-				     index, BOOT_DATA_WRITE_LEN);
++		len = ar0234_otp_flash_read(instance->otp_flash_instance,
++					    (u8 *)(&bootdata_temp_area[1]),
++					    index, BOOT_DATA_WRITE_LEN);
+ 		dev_dbg(dev, "len [%zu]\n", len);
+ 		sensor_i2c_write_bust(instance->i2c_client,
+ 				      (u8 *)bootdata_temp_area,
+@@ -595,7 +595,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
+ 		return -EINVAL;
+ 	}
+ 
+-	instance->otp_flash_instance = otp_flash_init(dev);
++	instance->otp_flash_instance = ar0234_otp_flash_init(dev);
+ 	if(IS_ERR(instance->otp_flash_instance)) {
+ 		dev_err(dev, "otp flash init failed\n");
+ 		return -EINVAL;
+diff --git a/drivers/media/i2c/tevi-ar0234/otp_flash.c b/drivers/media/i2c/tevi-ar0234/otp_flash.c
+index 3ebbf0aca206..2fc54fe0164f 100644
+--- a/drivers/media/i2c/tevi-ar0234/otp_flash.c
++++ b/drivers/media/i2c/tevi-ar0234/otp_flash.c
+@@ -10,17 +10,17 @@ struct otp_flash {
+ #ifdef __FAKE__
+ #include "bootdata.h"
+ 
+-struct otp_flash *otp_flash_init(struct device *dev)
++struct otp_flash *ar0234_otp_flash_init(struct device *dev)
+ {
+ 	return NULL;
+ }
+ 
+-u16 otp_flash_get_checksum(struct otp_flash *instance)
++u16 ar0234_otp_flash_get_checksum(struct otp_flash *instance)
+ {
+ 	return BOOTDATA_CHECKSUM;
+ }
+ 
+-size_t otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len)
++size_t ar0234_otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len)
+ {
+ 	size_t l;
+ 
+@@ -33,14 +33,14 @@ size_t otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len
+ 	return l;
+ }
+ 
+-size_t otp_flash_get_pll_length(struct otp_flash *instance)
++size_t ar0234_otp_flash_get_pll_length(struct otp_flash *instance)
+ {
+ 	return BOOTDATA_PLL_INIT_SIZE;
+ }
+ 
+-size_t otp_flash_get_pll_section(struct otp_flash *instance, u8 *data)
++size_t ar0234_otp_flash_get_pll_section(struct otp_flash *instance, u8 *data)
+ {
+-	otp_flash_read(instance, data, 0, BOOTDATA_PLL_INIT_SIZE);
++	ar0234_otp_flash_read(instance, data, 0, BOOTDATA_PLL_INIT_SIZE);
+ 	return BOOTDATA_PLL_INIT_SIZE;
+ }
+ #else
+@@ -72,7 +72,7 @@ struct header_ver2 {
+ 	u16 pll_bootdata_len;
+ } __attribute__((packed));
+ 
+-struct otp_flash *otp_flash_init(struct device *dev)
++struct otp_flash *ar0234_otp_flash_init(struct device *dev)
+ {
+ 	struct otp_flash *instance;
+ 	u8 __header_ver;
+@@ -126,7 +126,7 @@ struct otp_flash *otp_flash_init(struct device *dev)
+ 	return ERR_PTR(-EINVAL);
+ }
+ 
+-u16 otp_flash_get_checksum(struct otp_flash *instance)
++u16 ar0234_otp_flash_get_checksum(struct otp_flash *instance)
+ {
+ 	struct header_ver2 *header;
+ 
+@@ -138,7 +138,7 @@ u16 otp_flash_get_checksum(struct otp_flash *instance)
+ 	return 0xffff;
+ }
+ 
+-size_t otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len)
++size_t ar0234_otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len)
+ {
+ 	u8 *temp;
+ 	struct header_ver2 *header;
+@@ -162,7 +162,7 @@ size_t otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len
+ 	return 0;
+ }
+ 
+-size_t otp_flash_get_pll_length(struct otp_flash *instance)
++size_t ar0234_otp_flash_get_pll_length(struct otp_flash *instance)
+ {
+ 	u8 *temp;
+ 	struct header_ver2 *header;
+@@ -176,7 +176,7 @@ size_t otp_flash_get_pll_length(struct otp_flash *instance)
+ 	return 0;
+ }
+ 
+-size_t otp_flash_get_pll_section(struct otp_flash *instance, u8 *data)
++size_t ar0234_otp_flash_get_pll_section(struct otp_flash *instance, u8 *data)
+ {
+ 	u8 *temp;
+ 	struct header_ver2 *header;
+@@ -185,8 +185,8 @@ size_t otp_flash_get_pll_section(struct otp_flash *instance, u8 *data)
+ 	if(temp[0] == 2) {
+ 		header = (struct header_ver2 *)instance->header_data;
+ 		if (header->pll_bootdata_len != 0) {
+-			otp_flash_read(instance, data, 0,
+-				       header->pll_bootdata_len);
++			ar0234_otp_flash_read(instance, data, 0,
++					      header->pll_bootdata_len);
+ 		}
+ 		return header->pll_bootdata_len;
+ 	}
+diff --git a/drivers/media/i2c/tevi-ar0234/otp_flash.h b/drivers/media/i2c/tevi-ar0234/otp_flash.h
+index eddc2e6f3b98..2350765325f2 100644
+--- a/drivers/media/i2c/tevi-ar0234/otp_flash.h
++++ b/drivers/media/i2c/tevi-ar0234/otp_flash.h
+@@ -8,10 +8,10 @@
+ #define BOOT_DATA_WRITE_LEN (BOOT_DATA_END_REG - BOOT_DATA_START_REG + 1)
+ 
+ struct otp_flash;
+-struct otp_flash *otp_flash_init(struct device *dev);
+-u16 otp_flash_get_checksum(struct otp_flash *instance);
+-size_t otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len);
+-size_t otp_flash_get_pll_length(struct otp_flash *instance);
+-size_t otp_flash_get_pll_section(struct otp_flash*instance, u8 *data);
++struct otp_flash *ar0234_otp_flash_init(struct device *dev);
++u16 ar0234_otp_flash_get_checksum(struct otp_flash *instance);
++size_t ar0234_otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len);
++size_t ar0234_otp_flash_get_pll_length(struct otp_flash *instance);
++size_t ar0234_otp_flash_get_pll_section(struct otp_flash*instance, u8 *data);
+ 
+ #endif
+diff --git a/drivers/media/i2c/tevi-ar0521/main.c b/drivers/media/i2c/tevi-ar0521/main.c
+index acab9b9936bc..1eb5b9921537 100644
+--- a/drivers/media/i2c/tevi-ar0521/main.c
++++ b/drivers/media/i2c/tevi-ar0521/main.c
+@@ -28,7 +28,7 @@ struct resolution {
+ 	u16 height;
+ };
+ 
+-struct resolution res_list[] = {
++static struct resolution res_list[] = {
+ 	{.width = 2592, .height = 1944},
+ 	{.width = 1920, .height = 1080},
+ 	{.width = 1280, .height = 720},
+@@ -501,12 +501,12 @@ static int sensor_load_bootdata(struct sensor *instance)
+ 		return -EINVAL;
+ 	}
+ 
+-	checksum = otp_flash_get_checksum(instance->otp_flash_instance);
++	checksum = ar0521_otp_flash_get_checksum(instance->otp_flash_instance);
+ 
+ 	//load pll
+ 	bootdata_temp_area[0] = cpu_to_be16(BOOT_DATA_START_REG);
+-	pll_len = len = otp_flash_get_pll_section(instance->otp_flash_instance,
+-						  (u8 *)(&bootdata_temp_area[1]));
++	pll_len = len = ar0521_otp_flash_get_pll_section(instance->otp_flash_instance,
++							 (u8 *)(&bootdata_temp_area[1]));
+ 	dev_dbg(dev, "pll len [%zu]\n", len);
+ 	sensor_i2c_write_bust(instance->i2c_client, (u8 *)bootdata_temp_area,
+ 			      len + 2);
+@@ -515,9 +515,9 @@ static int sensor_load_bootdata(struct sensor *instance)
+ 
+ 	//load bootdata part1
+ 	bootdata_temp_area[0] = cpu_to_be16(BOOT_DATA_START_REG + pll_len);
+-	len = otp_flash_read(instance->otp_flash_instance,
+-			     (u8 *)(&bootdata_temp_area[1]),
+-			     pll_len, BOOT_DATA_WRITE_LEN - pll_len);
++	len = ar0521_otp_flash_read(instance->otp_flash_instance,
++				    (u8 *)(&bootdata_temp_area[1]),
++				    pll_len, BOOT_DATA_WRITE_LEN - pll_len);
+ 	dev_dbg(dev, "len [%zu]\n", len);
+ 	sensor_i2c_write_bust(instance->i2c_client,
+ 			      (u8 *)bootdata_temp_area,
+@@ -527,9 +527,9 @@ static int sensor_load_bootdata(struct sensor *instance)
+ 	index = len = BOOT_DATA_WRITE_LEN;
+ 	while(!(len < BOOT_DATA_WRITE_LEN)) {
+ 		bootdata_temp_area[0] = cpu_to_be16(BOOT_DATA_START_REG);
+-		len = otp_flash_read(instance->otp_flash_instance,
+-				     (u8 *)(&bootdata_temp_area[1]),
+-				     index, BOOT_DATA_WRITE_LEN);
++		len = ar0521_otp_flash_read(instance->otp_flash_instance,
++					    (u8 *)(&bootdata_temp_area[1]),
++					    index, BOOT_DATA_WRITE_LEN);
+ 		dev_dbg(dev, "len [%zu]\n", len);
+ 		sensor_i2c_write_bust(instance->i2c_client,
+ 				      (u8 *)bootdata_temp_area,
+@@ -595,7 +595,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
+ 		return -EINVAL;
+ 	}
+ 
+-	instance->otp_flash_instance = otp_flash_init(dev);
++	instance->otp_flash_instance = ar0521_otp_flash_init(dev);
+ 	if(IS_ERR(instance->otp_flash_instance)) {
+ 		dev_err(dev, "otp flash init failed\n");
+ 		return -EINVAL;
+diff --git a/drivers/media/i2c/tevi-ar0521/otp_flash.c b/drivers/media/i2c/tevi-ar0521/otp_flash.c
+index 3ebbf0aca206..a12a2c5b6514 100644
+--- a/drivers/media/i2c/tevi-ar0521/otp_flash.c
++++ b/drivers/media/i2c/tevi-ar0521/otp_flash.c
+@@ -10,17 +10,17 @@ struct otp_flash {
+ #ifdef __FAKE__
+ #include "bootdata.h"
+ 
+-struct otp_flash *otp_flash_init(struct device *dev)
++struct otp_flash *ar0521_otp_flash_init(struct device *dev)
+ {
+ 	return NULL;
+ }
+ 
+-u16 otp_flash_get_checksum(struct otp_flash *instance)
++u16 ar0521_otp_flash_get_checksum(struct otp_flash *instance)
+ {
+ 	return BOOTDATA_CHECKSUM;
+ }
+ 
+-size_t otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len)
++size_t ar0521_otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len)
+ {
+ 	size_t l;
+ 
+@@ -33,14 +33,14 @@ size_t otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len
+ 	return l;
+ }
+ 
+-size_t otp_flash_get_pll_length(struct otp_flash *instance)
++size_t ar0521_otp_flash_get_pll_length(struct otp_flash *instance)
+ {
+ 	return BOOTDATA_PLL_INIT_SIZE;
+ }
+ 
+-size_t otp_flash_get_pll_section(struct otp_flash *instance, u8 *data)
++size_t ar0521_otp_flash_get_pll_section(struct otp_flash *instance, u8 *data)
+ {
+-	otp_flash_read(instance, data, 0, BOOTDATA_PLL_INIT_SIZE);
++	ar0521_otp_flash_read(instance, data, 0, BOOTDATA_PLL_INIT_SIZE);
+ 	return BOOTDATA_PLL_INIT_SIZE;
+ }
+ #else
+@@ -72,7 +72,7 @@ struct header_ver2 {
+ 	u16 pll_bootdata_len;
+ } __attribute__((packed));
+ 
+-struct otp_flash *otp_flash_init(struct device *dev)
++struct otp_flash *ar0521_otp_flash_init(struct device *dev)
+ {
+ 	struct otp_flash *instance;
+ 	u8 __header_ver;
+@@ -126,7 +126,7 @@ struct otp_flash *otp_flash_init(struct device *dev)
+ 	return ERR_PTR(-EINVAL);
+ }
+ 
+-u16 otp_flash_get_checksum(struct otp_flash *instance)
++u16 ar0521_otp_flash_get_checksum(struct otp_flash *instance)
+ {
+ 	struct header_ver2 *header;
+ 
+@@ -138,7 +138,7 @@ u16 otp_flash_get_checksum(struct otp_flash *instance)
+ 	return 0xffff;
+ }
+ 
+-size_t otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len)
++size_t ar0521_otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len)
+ {
+ 	u8 *temp;
+ 	struct header_ver2 *header;
+@@ -162,7 +162,7 @@ size_t otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len
+ 	return 0;
+ }
+ 
+-size_t otp_flash_get_pll_length(struct otp_flash *instance)
++size_t ar0521_otp_flash_get_pll_length(struct otp_flash *instance)
+ {
+ 	u8 *temp;
+ 	struct header_ver2 *header;
+@@ -176,7 +176,7 @@ size_t otp_flash_get_pll_length(struct otp_flash *instance)
+ 	return 0;
+ }
+ 
+-size_t otp_flash_get_pll_section(struct otp_flash *instance, u8 *data)
++size_t ar0521_otp_flash_get_pll_section(struct otp_flash *instance, u8 *data)
+ {
+ 	u8 *temp;
+ 	struct header_ver2 *header;
+@@ -185,8 +185,8 @@ size_t otp_flash_get_pll_section(struct otp_flash *instance, u8 *data)
+ 	if(temp[0] == 2) {
+ 		header = (struct header_ver2 *)instance->header_data;
+ 		if (header->pll_bootdata_len != 0) {
+-			otp_flash_read(instance, data, 0,
+-				       header->pll_bootdata_len);
++			ar0521_otp_flash_read(instance, data, 0,
++					      header->pll_bootdata_len);
+ 		}
+ 		return header->pll_bootdata_len;
+ 	}
+diff --git a/drivers/media/i2c/tevi-ar0521/otp_flash.h b/drivers/media/i2c/tevi-ar0521/otp_flash.h
+index eddc2e6f3b98..237adebc4319 100644
+--- a/drivers/media/i2c/tevi-ar0521/otp_flash.h
++++ b/drivers/media/i2c/tevi-ar0521/otp_flash.h
+@@ -8,10 +8,10 @@
+ #define BOOT_DATA_WRITE_LEN (BOOT_DATA_END_REG - BOOT_DATA_START_REG + 1)
+ 
+ struct otp_flash;
+-struct otp_flash *otp_flash_init(struct device *dev);
+-u16 otp_flash_get_checksum(struct otp_flash *instance);
+-size_t otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len);
+-size_t otp_flash_get_pll_length(struct otp_flash *instance);
+-size_t otp_flash_get_pll_section(struct otp_flash*instance, u8 *data);
++struct otp_flash *ar0521_otp_flash_init(struct device *dev);
++u16 ar0521_otp_flash_get_checksum(struct otp_flash *instance);
++size_t ar0521_otp_flash_read(struct otp_flash *instance, u8 *data, int addr, size_t len);
++size_t ar0521_otp_flash_get_pll_length(struct otp_flash *instance);
++size_t ar0521_otp_flash_get_pll_section(struct otp_flash*instance, u8 *data);
+ 
+ #endif
+-- 
+2.25.1
+

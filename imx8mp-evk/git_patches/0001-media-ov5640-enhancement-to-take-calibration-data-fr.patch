@@ -1,0 +1,76 @@
+From ba263825aff408c4e906ed57967d86034a030ea4 Mon Sep 17 00:00:00 2001
+From: Ray Chang <ray.chang@technexion.com>
+Date: Mon, 8 Mar 2021 16:58:33 +0800
+Subject: [PATCH 01/17] media: ov5640: enhancement to take calibration data
+ from eeprom of the camera module
+
+- parse additional device tree settings for eeprom of the camera module
+
+For example:
+	ov5640_0: ov5640_mipi@3c {
+		compatible = ovti,ov5640;
+		...
+		nvmem-cells = <&csi0_calibration_data>;
+		nvmem-cell-names = calibration-data;
+		...
+	};
+
+	eeprom@54 {
+		compatible = atmel,24c64;
+		read-only;
+		reg = <0x54>;
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		csi0_calibration_data: csi0-calib@0 {
+			reg = <0x0 0x788>;
+		};
+	};
+---
+ drivers/media/i2c/ov5640.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index ca210cc32eae..56f4e8ba5fa3 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -14,6 +14,7 @@
+ #include <linux/i2c.h>
+ #include <linux/init.h>
+ #include <linux/module.h>
++#include <linux/nvmem-consumer.h>
+ #include <linux/of_device.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/slab.h>
+@@ -563,7 +564,7 @@ static const struct reg_value ov5640_setting_QSXGA_2592_1944[] = {
+ };
+ 
+ /* power-on sensor init reg table */
+-static const struct ov5640_mode_info ov5640_mode_init_data = {
++static struct ov5640_mode_info ov5640_mode_init_data = {
+ 	0, SUBSAMPLING, 640, 1896, 480, 984,
+ 	ov5640_init_setting_30fps_VGA,
+ 	ARRAY_SIZE(ov5640_init_setting_30fps_VGA),
+@@ -1904,9 +1905,19 @@ static int ov5640_set_framefmt(struct ov5640_dev *sensor,
+ /* restore the last set video mode after chip power-on */
+ static int ov5640_restore_mode(struct ov5640_dev *sensor)
+ {
++	struct i2c_client *client = sensor->i2c_client;
++	struct nvmem_cell *cell;
++	size_t len;
+ 	int ret;
+ 
+ 	/* first load the initial register values */
++	cell = nvmem_cell_get(&client->dev, "calibration-data");
++	if (! IS_ERR(cell)) {
++		ov5640_mode_init_data.reg_data = (struct reg_value *)nvmem_cell_read(cell, &len);
++		ov5640_mode_init_data.reg_data_size = len / sizeof(struct reg_value);
++		nvmem_cell_put(cell);
++	}
++
+ 	ret = ov5640_load_regs(sensor, &ov5640_mode_init_data);
+ 	if (ret < 0)
+ 		return ret;
+-- 
+2.25.1
+
