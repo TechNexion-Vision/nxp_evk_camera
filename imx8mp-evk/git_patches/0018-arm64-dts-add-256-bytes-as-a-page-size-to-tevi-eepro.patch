@@ -1,0 +1,116 @@
+From 3c180afe465f95d89f3fb44f68fe3fff78ac75a1 Mon Sep 17 00:00:00 2001
+From: Wig Cheng <wig.cheng@technexion.com>
+Date: Fri, 26 Nov 2021 14:56:13 +0800
+Subject: [PATCH 18/18] arm64: dts: add 256 bytes as a page size to tevi eeprom
+ nodes
+
+---
+ arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi1.dts | 1 +
+ arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi2.dts | 1 +
+ arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi1.dts | 1 +
+ arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi2.dts | 1 +
+ arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi1.dts | 1 +
+ arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi2.dts | 1 +
+ arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi1.dts | 1 +
+ arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi2.dts | 1 +
+ 8 files changed, 8 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi1.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi1.dts
+index f561ad42f05d..174e33504434 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi1.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi1.dts
+@@ -25,6 +25,7 @@ adv7535@3d {
+ 
+ 	tevi_ar0144_otp_0: tevi_ar0144_otp@54 {
+ 		compatible = "atmel,24c1024";
++		pagesize = <256>;
+ 		reg = <0x54>;
+ 		//read-only;
+ 	};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi2.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi2.dts
+index fb8e4802d351..62da19e64728 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi2.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi2.dts
+@@ -27,6 +27,7 @@ &i2c3 {
+ 	tevi_ar0144_otp_1: tevi_ar0144_otp@54 {
+ 		compatible = "atmel,24c1024";
+ 		reg = <0x54>;
++		pagesize = <256>;
+ 		//read-only;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi1.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi1.dts
+index decd4d9236b1..1e9fb621ca37 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi1.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi1.dts
+@@ -26,6 +26,7 @@ adv7535@3d {
+ 	tevi_ar0234_otp_0: tevi_ar0234_otp@54 {
+ 		compatible = "atmel,24c1024";
+ 		reg = <0x54>;
++		pagesize = <256>;
+ 		//read-only;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi2.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi2.dts
+index db6e9fa83e29..c396166d22fd 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi2.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi2.dts
+@@ -28,6 +28,7 @@ &i2c3 {
+ 	tevi_ar0234_otp_1: tevi_ar0234_otp@54 {
+ 		compatible = "atmel,24c1024";
+ 		reg = <0x54>;
++		pagesize = <256>;
+ 		//read-only;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi1.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi1.dts
+index e9a1068941dd..22fd1b26586b 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi1.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi1.dts
+@@ -26,6 +26,7 @@ adv7535@3d {
+ 	tevi_ar0521_otp_0: tevi_ar0521_otp@54 {
+ 		compatible = "atmel,24c1024";
+ 		reg = <0x54>;
++		pagesize = <256>;
+ 		//read-only;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi2.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi2.dts
+index e9c659a5ff50..31640378722a 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi2.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi2.dts
+@@ -28,6 +28,7 @@ &i2c3 {
+ 	tevi_ar0521_otp_1: tevi_ar0521_otp@54 {
+ 		compatible = "atmel,24c1024";
+ 		reg = <0x54>;
++		pagesize = <256>;
+ 		//read-only;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi1.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi1.dts
+index 34e17b267c63..0f025e9dbfe0 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi1.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi1.dts
+@@ -20,6 +20,7 @@ &i2c2 {
+ 
+ 	ov5640_otp_0: eeprom@54 {
+ 		compatible = "atmel,24c64";
++		pagesize = <256>;
+ 		reg = <0x54>;
+ 		//read-only;
+ 	};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi2.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi2.dts
+index 40d03ee07c61..b5f78e9c80aa 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi2.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi2.dts
+@@ -26,6 +26,7 @@ &i2c3 {
+ 
+ 	ov5640_otp_1: eeprom@54 {
+ 		compatible = "atmel,24c64";
++		pagesize = <256>;
+ 		reg = <0x54>;
+ 		//read-only;
+ 	};
+-- 
+2.25.1
+

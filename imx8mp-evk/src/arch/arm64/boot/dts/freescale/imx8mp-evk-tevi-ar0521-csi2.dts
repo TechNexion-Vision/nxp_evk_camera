@@ -28,6 +28,7 @@
 	tevi_ar0521_otp_1: tevi_ar0521_otp@54 {
 		compatible = "atmel,24c1024";
 		reg = <0x54>;
+		pagesize = <256>;
 		//read-only;
 	};
 

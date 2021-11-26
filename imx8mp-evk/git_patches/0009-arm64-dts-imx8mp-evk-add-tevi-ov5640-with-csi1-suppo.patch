@@ -1,7 +1,7 @@
 From cf851fd3cb0da18f052a343f819277cb7abfbeb8 Mon Sep 17 00:00:00 2001
 From: Wig Cheng <wig.cheng@technexion.com>
 Date: Mon, 22 Nov 2021 18:29:10 +0800
-Subject: [PATCH 09/17] arm64: dts: imx8mp-evk: add tevi-ov5640 with csi1
+Subject: [PATCH 09/18] arm64: dts: imx8mp-evk: add tevi-ov5640 with csi1
  support
 
 ---

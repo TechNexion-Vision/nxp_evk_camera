@@ -26,6 +26,7 @@
 
 	ov5640_otp_1: eeprom@54 {
 		compatible = "atmel,24c64";
+		pagesize = <256>;
 		reg = <0x54>;
 		//read-only;
 	};

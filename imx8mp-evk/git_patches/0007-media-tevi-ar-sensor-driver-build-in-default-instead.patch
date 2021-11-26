@@ -1,7 +1,7 @@
 From 90a0a66646ea18c246640675a212b72c77672ca8 Mon Sep 17 00:00:00 2001
 From: Leo Wang <leo.wang@technexion.com>
 Date: Thu, 14 Oct 2021 18:18:45 +0800
-Subject: [PATCH 07/17] media: tevi-ar* sensor: driver build-in default instead
+Subject: [PATCH 07/18] media: tevi-ar* sensor: driver build-in default instead
  of module
 
 ---

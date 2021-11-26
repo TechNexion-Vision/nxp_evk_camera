@@ -1,7 +1,7 @@
 From 27c5f924cf96e21aa958cb51ff17d4d2f821aa33 Mon Sep 17 00:00:00 2001
 From: Wig Cheng <wig.cheng@technexion.com>
 Date: Mon, 22 Nov 2021 18:12:09 +0800
-Subject: [PATCH 08/17] configs: imx_v8_defconfig: enable EEPROM_AT24 function
+Subject: [PATCH 08/18] configs: imx_v8_defconfig: enable EEPROM_AT24 function
  for tevi-series
 
 ---

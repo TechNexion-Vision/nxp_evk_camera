@@ -1,7 +1,7 @@
 From 8a34e48da1a0e9f838fa706ea647a975b6efd38b Mon Sep 17 00:00:00 2001
 From: Leo Wang <leo.wang@technexion.com>
 Date: Fri, 17 Sep 2021 15:26:51 +0800
-Subject: [PATCH 05/17] media: tevi-ar0144: tevi-ar0144 driver implement
+Subject: [PATCH 05/18] media: tevi-ar0144: tevi-ar0144 driver implement
 
 V4l2 sub-device driver implement for TechNexion TEVI-AR0144 sensor
 module

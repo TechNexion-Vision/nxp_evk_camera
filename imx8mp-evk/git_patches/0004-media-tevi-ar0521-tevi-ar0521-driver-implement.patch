@@ -1,7 +1,7 @@
 From 3601b53b51d8e3b4cc42bcee5e784d6e4aaaef65 Mon Sep 17 00:00:00 2001
 From: Leo Wang <leo.wang@technexion.com>
 Date: Fri, 30 Jul 2021 13:21:40 +0800
-Subject: [PATCH 04/17] media: tevi-ar0521: tevi-ar0521 driver implement
+Subject: [PATCH 04/18] media: tevi-ar0521: tevi-ar0521 driver implement
 
 V4l2 sub-device driver implement for TechNexion TEVI-AR0521 sensor
 module
