@@ -15,7 +15,7 @@ NXP IMX8 EVK with TEVI camera support
 
 ## BSP Requirement
  --------
-* Yocto 3.3 with Kernel 5.10.52 (https://www.nxp.com/docs/en/user-guide/IMX_YOCTO_PROJECT_USERS_GUIDE.pdf)
+[Yocto 3.3 with Kernel 5.10.52](https://www.nxp.com/design/software/embedded-software/i-mx-software/embedded-linux-for-i-mx-applications-processors:IMXLINUX?tab=In-Depth_Tab)
 
 ## User Guide
    --------
