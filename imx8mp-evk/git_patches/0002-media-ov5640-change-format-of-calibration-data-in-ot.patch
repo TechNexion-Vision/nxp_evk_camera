@@ -1,7 +1,7 @@
 From 72430159e45ef6bab2e331fbb7972274ac45f929 Mon Sep 17 00:00:00 2001
 From: Leo Wang <leo.wang@technexion.com>
 Date: Wed, 17 Mar 2021 19:06:34 +0800
-Subject: [PATCH 02/18] media: ov5640: change format of calibration data in otp
+Subject: [PATCH 02/20] media: ov5640: change format of calibration data in otp
  flash
 
 Change data format of calibration data.Add product name, product

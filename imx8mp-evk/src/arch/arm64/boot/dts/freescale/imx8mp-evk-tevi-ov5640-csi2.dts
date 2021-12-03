@@ -15,6 +15,16 @@
 
 #include "imx8mp-evk.dts"
 
+&gpio2 {
+	pinctrl-0 = <&pinctrl_gpio2>;
+	csi_pwr {
+		gpio-hog;
+		gpios = <11 GPIO_ACTIVE_HIGH>;
+		line-name = "CSI_POWER";
+		output-high;
+	};
+};
+
 &i2c2 {
 	ov5640_0: ov5640_mipi@3c {
 		status = "disabled";
@@ -35,7 +45,7 @@
 		compatible = "ovti,ov5640";
 		reg = <0x3c>;
 		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_csi1_pwn>, <&pinctrl_csi0_rst>;
+		pinctrl-0 = <&pinctrl_sensor1_pwn>, <&pinctrl_csi0_rst>;
 		clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
 		clock-names = "xclk";
 		assigned-clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
@@ -62,7 +72,13 @@
 };
 
 &iomuxc {
-	pinctrl_csi1_pwn: csi1_pwn_grp {
+	pinctrl_gpio2: gpio2_grp {
+		fsl,pins = <
+			MX8MP_IOMUXC_SD1_STROBE__GPIO2_IO11	0x19
+		>;
+	};
+
+	pinctrl_sensor1_pwn: sensor1_pwn_grp {
 		fsl,pins = <
 			MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07	0x19
 		>;

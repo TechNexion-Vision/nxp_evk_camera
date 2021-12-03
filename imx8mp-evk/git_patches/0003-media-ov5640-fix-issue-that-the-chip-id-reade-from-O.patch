@@ -1,7 +1,7 @@
 From 9256d3847903f72c75dd765b834f4f3b0d34c03c Mon Sep 17 00:00:00 2001
 From: Richard Hu <richard.hu@technexion.com>
 Date: Fri, 27 Aug 2021 15:07:09 +0800
-Subject: [PATCH 03/18] media: ov5640: fix issue that the chip id reade from
+Subject: [PATCH 03/20] media: ov5640: fix issue that the chip id reade from
  OV5640 is wrong
 
 Add 2ms delay after switching on OV5640 power to wait OV5640 become stable, then read chip id.

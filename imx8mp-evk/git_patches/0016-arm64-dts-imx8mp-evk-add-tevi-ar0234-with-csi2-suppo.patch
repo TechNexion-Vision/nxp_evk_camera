@@ -1,7 +1,7 @@
 From e0cf86547a1bb5f01e1f79e39323cbb9c69e063c Mon Sep 17 00:00:00 2001
 From: Wig Cheng <wig.cheng@technexion.com>
 Date: Tue, 23 Nov 2021 13:13:18 +0800
-Subject: [PATCH 16/18] arm64: dts: imx8mp-evk: add tevi-ar0234 with csi2
+Subject: [PATCH 16/20] arm64: dts: imx8mp-evk: add tevi-ar0234 with csi2
  support
 
 ---

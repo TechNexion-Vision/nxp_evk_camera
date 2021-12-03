@@ -1,7 +1,7 @@
 From 7dea971f3fa80f1c512eb7033ef4b08c5275e215 Mon Sep 17 00:00:00 2001
 From: Wig Cheng <wig.cheng@technexion.com>
 Date: Tue, 23 Nov 2021 18:38:19 +0800
-Subject: [PATCH 17/18] arm64: dts: add tevi series to imx8mp-evk support list
+Subject: [PATCH 17/20] arm64: dts: add tevi series to imx8mp-evk support list
 
 Include tevi-ov5640, tevi-ar0521, tevi-ar0144 and tevi-ar0234 camera
 sensors.

@@ -1,7 +1,7 @@
 From 3c180afe465f95d89f3fb44f68fe3fff78ac75a1 Mon Sep 17 00:00:00 2001
 From: Wig Cheng <wig.cheng@technexion.com>
 Date: Fri, 26 Nov 2021 14:56:13 +0800
-Subject: [PATCH 18/18] arm64: dts: add 256 bytes as a page size to tevi eeprom
+Subject: [PATCH 18/20] arm64: dts: add 256 bytes as a page size to tevi eeprom
  nodes
 
 ---

@@ -1,0 +1,60 @@
+From 929f261d96194b7d452f60684ad877a71068c14e Mon Sep 17 00:00:00 2001
+From: Wig Cheng <wig.cheng@technexion.com>
+Date: Fri, 3 Dec 2021 14:10:04 +0800
+Subject: [PATCH 20/20] arm64: dts: imx8mp-evk: add power pin control to csi2
+ with ov5640 sensor
+
+Because power pin enabling must be done before ov5640 initialization, so
+adapt gpio node to implement.
+---
+ .../freescale/imx8mp-evk-tevi-ov5640-csi2.dts | 20 +++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi2.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi2.dts
+index b5f78e9c80aa..bd13e86a30ee 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi2.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi2.dts
+@@ -15,6 +15,16 @@
+ 
+ #include "imx8mp-evk.dts"
+ 
++&gpio2 {
++	pinctrl-0 = <&pinctrl_gpio2>;
++	csi_pwr {
++		gpio-hog;
++		gpios = <11 GPIO_ACTIVE_HIGH>;
++		line-name = "CSI_POWER";
++		output-high;
++	};
++};
++
+ &i2c2 {
+ 	ov5640_0: ov5640_mipi@3c {
+ 		status = "disabled";
+@@ -35,7 +45,7 @@ tevi_ov5640_mipi@3c {
+ 		compatible = "ovti,ov5640";
+ 		reg = <0x3c>;
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_csi1_pwn>, <&pinctrl_csi0_rst>;
++		pinctrl-0 = <&pinctrl_sensor1_pwn>, <&pinctrl_csi0_rst>;
+ 		clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
+ 		clock-names = "xclk";
+ 		assigned-clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
+@@ -62,7 +72,13 @@ ov5640_mipi_1_ep: endpoint {
+ };
+ 
+ &iomuxc {
+-	pinctrl_csi1_pwn: csi1_pwn_grp {
++	pinctrl_gpio2: gpio2_grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SD1_STROBE__GPIO2_IO11	0x19
++		>;
++	};
++
++	pinctrl_sensor1_pwn: sensor1_pwn_grp {
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07	0x19
+ 		>;
+-- 
+2.25.1
+
