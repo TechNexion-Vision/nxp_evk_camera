@@ -1,0 +1,26 @@
+From 4cb35bd46cabc09ad7c2709385c6213a4f47c6b5 Mon Sep 17 00:00:00 2001
+From: Wig Cheng <wig.cheng@technexion.com>
+Date: Mon, 22 Nov 2021 18:12:09 +0800
+Subject: [PATCH 08/23] configs: imx_v8_defconfig: enable EEPROM_AT24 function
+ for tevi-series
+
+---
+ arch/arm64/configs/imx_v8_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/configs/imx_v8_defconfig b/arch/arm64/configs/imx_v8_defconfig
+index 775fd503bd76..b4cf7bcacc67 100644
+--- a/arch/arm64/configs/imx_v8_defconfig
++++ b/arch/arm64/configs/imx_v8_defconfig
+@@ -236,7 +236,7 @@ CONFIG_SENSORS_FXOS8700=y
+ CONFIG_SENSORS_FXAS2100X=y
+ CONFIG_SRAM=y
+ CONFIG_PCI_ENDPOINT_TEST=y
+-CONFIG_EEPROM_AT24=m
++CONFIG_EEPROM_AT24=y
+ CONFIG_EEPROM_AT25=m
+ CONFIG_UACCE=m
+ # CONFIG_SCSI_PROC_FS is not set
+-- 
+2.25.1
+

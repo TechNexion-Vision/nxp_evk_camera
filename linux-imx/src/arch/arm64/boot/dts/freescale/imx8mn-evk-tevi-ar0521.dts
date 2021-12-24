@@ -1,0 +1,82 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright 2021 Technexion Ltd.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include "imx8mn-evk.dts"
+
+&i2c3 {
+	clock-frequency = <400000>;
+	/delete-node/ ov5640_mipi@3c;
+
+	tevi_ar0521_otp_0: eeprom@54 {
+		compatible = "atmel,24c1024";
+		reg = <0x54>;
+		pagesize = <128>;
+		//read-only;
+	};
+
+	tevi_ar0521_0: tevi_ar0521@3d {
+		compatible = "tn,tevi-ar0521";
+		reg = <0x3d>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_csi_pwn>, <&pinctrl_csi_rst>, <&pinctrl_csi_device_pwr_dummy>;
+		host-power-gpios = <&gpio1 14 GPIO_ACTIVE_HIGH>;
+		reset-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
+		device-power-gpios = <&gpio5 28 GPIO_ACTIVE_HIGH>;
+		standby-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
+
+		nvmem = <&tevi_ar0521_otp_0>;
+		nvmem-names = "calib-data";
+		status = "okay";
+
+		port {
+			tevi_ar0521_0_ep: endpoint {
+				remote-endpoint = <&mipi_csi0_ep>;
+			};
+		};
+	};
+};
+
+&mipi_csi_1 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+	port@0 {
+		reg = <0>;
+		mipi_csi0_ep: endpoint {
+			remote-endpoint = <&tevi_ar0521_0_ep>;
+			data-lanes = <4>;
+			csis-hs-settle = <13>;
+			csis-clk-settle = <2>;
+			csis-wclk;
+		};
+	};
+};
+
+
+&iomuxc {
+	pinctrl_csi_rst: csi_rst_grp {
+		fsl,pins = <
+			MX8MN_IOMUXC_GPIO1_IO06_GPIO1_IO6	0x19 /* RESET pin */
+			MX8MN_IOMUXC_GPIO1_IO14_GPIO1_IO14	0x19 /* CLK pin for dummy host power pin */
+		>;
+	};
+
+	pinctrl_csi_device_pwr_dummy: csi_device_pwr_dummy_grp {
+		fsl,pins = <
+			MX8MN_IOMUXC_UART4_RXD_GPIO5_IO28	0x9 /* dummy pin for device power pin */
+		>;
+	};
+};

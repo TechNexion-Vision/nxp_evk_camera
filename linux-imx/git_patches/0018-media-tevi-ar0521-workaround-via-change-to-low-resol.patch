@@ -1,0 +1,50 @@
+From 665325b0fc02983da73e462cec32b42c2f6d67be Mon Sep 17 00:00:00 2001
+From: Leo Wang <leo.wang@technexion.com>
+Date: Wed, 10 Nov 2021 18:02:39 +0800
+Subject: [PATCH 18/23] media: tevi-ar0521: workaround via change to low
+ resolution befort stream off
+
+readmine Bug #648:
+Sometimes video preview fails for the first time via gstreamer after system boot up.
+
+root couse:
+unknow.
+
+workaround:
+change to low resolution befort stream off.
+---
+ drivers/media/i2c/tevi-ar0521/main.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/i2c/tevi-ar0521/main.c b/drivers/media/i2c/tevi-ar0521/main.c
+index 1eb5b9921537..ab45eee295cc 100644
+--- a/drivers/media/i2c/tevi-ar0521/main.c
++++ b/drivers/media/i2c/tevi-ar0521/main.c
+@@ -29,9 +29,9 @@ struct resolution {
+ };
+ 
+ static struct resolution res_list[] = {
+-	{.width = 2592, .height = 1944},
+-	{.width = 1920, .height = 1080},
+ 	{.width = 1280, .height = 720},
++	{.width = 1920, .height = 1080},
++	{.width = 2592, .height = 1944},
+ };
+ 
+ static int sensor_standby(struct i2c_client *client, int enable);
+@@ -197,6 +197,12 @@ static int ops_set_stream(struct v4l2_subdev *sub_dev, int enable)
+ 		return -EINVAL;
+ 
+ 	if (enable == 0) {
++		sensor_i2c_write_16b(instance->i2c_client, 0x1184, 1); //ATOMIC
++		//VIDEO_WIDTH
++		sensor_i2c_write_16b(instance->i2c_client, 0x4000, 1280);
++		//VIDEO_HEIGHT
++		sensor_i2c_write_16b(instance->i2c_client, 0x4002, 720);
++		sensor_i2c_write_16b(instance->i2c_client, 0x1184, 0xb); //ATOMIC
+ 		ret = sensor_standby(instance->i2c_client, 1);
+ 	} else {
+ 		ret = sensor_standby(instance->i2c_client, 0);
+-- 
+2.25.1
+

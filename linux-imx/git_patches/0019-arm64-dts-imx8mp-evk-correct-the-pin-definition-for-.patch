@@ -1,0 +1,291 @@
+From 6536c16b6ca3aadfe0556e460a7e6cf9386f9a6d Mon Sep 17 00:00:00 2001
+From: Wig Cheng <wig.cheng@technexion.com>
+Date: Thu, 23 Dec 2021 17:30:17 +0800
+Subject: [PATCH 19/23] arm64: dts: imx8mp-evk: correct the pin definition for
+ tevi series
+
+In order to match hardware changing, major pins are reset pin and
+standby pin.
+
+Include tevi-ov5640, tevi-ar0521, tevi-ar0144 and tevi-ar0234 camera
+sensors.
+---
+ .../freescale/imx8mp-evk-tevi-ar0144-csi1.dts   |  5 +++--
+ .../freescale/imx8mp-evk-tevi-ar0144-csi2.dts   |  6 ++++--
+ .../freescale/imx8mp-evk-tevi-ar0234-csi1.dts   |  5 +++--
+ .../freescale/imx8mp-evk-tevi-ar0234-csi2.dts   |  9 +++++----
+ .../freescale/imx8mp-evk-tevi-ar0521-csi1.dts   |  5 +++--
+ .../freescale/imx8mp-evk-tevi-ar0521-csi2.dts   |  5 +++--
+ .../freescale/imx8mp-evk-tevi-ov5640-csi1.dts   | 17 +++--------------
+ .../freescale/imx8mp-evk-tevi-ov5640-csi2.dts   | 14 ++++++--------
+ 8 files changed, 30 insertions(+), 36 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi1.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi1.dts
+index f561ad42f05d..0d810ef72fa1 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi1.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi1.dts
+@@ -25,6 +25,7 @@ adv7535@3d {
+ 
+ 	tevi_ar0144_otp_0: tevi_ar0144_otp@54 {
+ 		compatible = "atmel,24c1024";
++		pagesize = <128>;
+ 		reg = <0x54>;
+ 		//read-only;
+ 	};
+@@ -34,10 +35,10 @@ tevi_ar0144_0: tevi_ar0144@3d {
+ 		reg = <0x3d>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>, <&pinctrl_csi_mclk>;
+-		host-power-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
++		host-power-gpios = <&gpio1 5 GPIO_ACTIVE_HIGH>;
+ 		reset-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
+ 		device-power-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+-		standby-gpios = <&gpio1 5 GPIO_ACTIVE_HIGH>;
++		standby-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+ 		nvmem = <&tevi_ar0144_otp_0>;
+ 		nvmem-names = "calib-data";
+ 		status = "okay";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi2.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi2.dts
+index fb8e4802d351..99da461eaf87 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi2.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0144-csi2.dts
+@@ -22,11 +22,13 @@ ov5640_0: ov5640_mipi@3c {
+ };
+ 
+ &i2c3 {
++	clock-frequency = <400000>;
+ 	/delete-node/ ov5640_mipi@3c;
+ 
+ 	tevi_ar0144_otp_1: tevi_ar0144_otp@54 {
+ 		compatible = "atmel,24c1024";
+ 		reg = <0x54>;
++		pagesize = <128>;
+ 		//read-only;
+ 	};
+ 
+@@ -35,10 +37,10 @@ tevi_ar0144_1: tevi_ar0144@3d {
+ 		reg = <0x3d>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>, <&pinctrl_csi_mclk>;
+-		host-power-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
++		host-power-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
+ 		reset-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
+ 		device-power-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+-		standby-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
++		standby-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+ 		nvmem = <&tevi_ar0144_otp_1>;
+ 		nvmem-names = "calib-data";
+ 		status = "okay";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi1.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi1.dts
+index decd4d9236b1..ca8f50bc3cca 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi1.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi1.dts
+@@ -26,6 +26,7 @@ adv7535@3d {
+ 	tevi_ar0234_otp_0: tevi_ar0234_otp@54 {
+ 		compatible = "atmel,24c1024";
+ 		reg = <0x54>;
++		pagesize = <128>;
+ 		//read-only;
+ 	};
+ 
+@@ -34,10 +35,10 @@ tevi_ar0234_0: tevi_ar0234@3d {
+ 		reg = <0x3d>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>, <&pinctrl_csi_mclk>;
+-		host-power-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
++		host-power-gpios = <&gpio1 5 GPIO_ACTIVE_HIGH>;
+ 		reset-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
+ 		device-power-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+-		standby-gpios = <&gpio1 5 GPIO_ACTIVE_HIGH>;
++		standby-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+ 		nvmem = <&tevi_ar0234_otp_0>;
+ 		nvmem-names = "calib-data";
+ 		status = "okay";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi2.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi2.dts
+index db6e9fa83e29..0c2f43af4dd9 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi2.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0234-csi2.dts
+@@ -28,6 +28,7 @@ &i2c3 {
+ 	tevi_ar0234_otp_1: tevi_ar0234_otp@54 {
+ 		compatible = "atmel,24c1024";
+ 		reg = <0x54>;
++		pagesize = <128>;
+ 		//read-only;
+ 	};
+ 
+@@ -36,10 +37,10 @@ tevi_ar0234_1: tevi_ar0234@3d {
+ 		reg = <0x3d>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>, <&pinctrl_csi_mclk>;
+-		host-power-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
++		host-power-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
+ 		reset-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
+ 		device-power-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+-		standby-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
++		standby-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+ 		nvmem = <&tevi_ar0234_otp_1>;
+ 		nvmem-names = "calib-data";
+ 		status = "okay";
+@@ -54,7 +55,7 @@ tevi_ar0234_1_ep: endpoint {
+ 
+ &mipi_csi_0 {
+ 	status = "disabled";
+-};
++}; 
+ 
+ &mipi_csi_1 {
+ 	status = "okay";
+@@ -68,7 +69,7 @@ endpoint {
+ 			csis-wclk;
+ 		};
+ 	};
+-};
++}; 
+ 
+ &isi_0 {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi1.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi1.dts
+index e9a1068941dd..53a039989cef 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi1.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi1.dts
+@@ -26,6 +26,7 @@ adv7535@3d {
+ 	tevi_ar0521_otp_0: tevi_ar0521_otp@54 {
+ 		compatible = "atmel,24c1024";
+ 		reg = <0x54>;
++		pagesize = <128>;
+ 		//read-only;
+ 	};
+ 
+@@ -34,10 +35,10 @@ tevi_ar0521_0: tevi_ar0521@3d {
+ 		reg = <0x3d>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>, <&pinctrl_csi_mclk>;
+-		host-power-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
++		host-power-gpios = <&gpio1 5 GPIO_ACTIVE_HIGH>;
+ 		reset-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
+ 		device-power-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+-		standby-gpios = <&gpio1 5 GPIO_ACTIVE_HIGH>;
++		standby-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+ 		nvmem = <&tevi_ar0521_otp_0>;
+ 		nvmem-names = "calib-data";
+ 		status = "okay";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi2.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi2.dts
+index e9c659a5ff50..3345339e3bc9 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi2.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ar0521-csi2.dts
+@@ -28,6 +28,7 @@ &i2c3 {
+ 	tevi_ar0521_otp_1: tevi_ar0521_otp@54 {
+ 		compatible = "atmel,24c1024";
+ 		reg = <0x54>;
++		pagesize = <128>;
+ 		//read-only;
+ 	};
+ 
+@@ -36,10 +37,10 @@ tevi_ar0521_0: tevi_ar0521@3d {
+ 		reg = <0x3d>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>, <&pinctrl_csi_mclk>;
+-		host-power-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
++		host-power-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
+ 		reset-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
+ 		device-power-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+-		standby-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
++		standby-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+ 		nvmem = <&tevi_ar0521_otp_1>;
+ 		nvmem-names = "calib-data";
+ 		status = "okay";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi1.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi1.dts
+index 34e17b267c63..9bbd53a8f22e 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi1.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi1.dts
+@@ -16,10 +16,12 @@
+ #include "imx8mp-evk.dts"
+ 
+ &i2c2 {
++	clock-frequency = <400000>;
+ 	/delete-node/ ov5640_mipi@3c;
+ 
+ 	ov5640_otp_0: eeprom@54 {
+ 		compatible = "atmel,24c64";
++		pagesize = <128>;
+ 		reg = <0x54>;
+ 		//read-only;
+ 	};
+@@ -35,7 +37,7 @@ tevi_ov5640_mipi@3c {
+ 		assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
+ 		assigned-clock-rates = <24000000>;
+ 		csi_id = <0>;
+-		powerdown-gpios = <&gpio1 5 GPIO_ACTIVE_HIGH>;
++		powerdown-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+ 		reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
+ 		mclk = <24000000>;
+ 		mclk_source = <0>;
+@@ -70,16 +72,3 @@ mipi_csi0_ep: endpoint {
+ 		};
+ 	};
+ };
+-
+-&isi_1 {
+-	status = "okay";
+-};
+-
+-
+-&iomuxc {
+-	pinctrl_csi0_pwn: csi0_pwn_grp {
+-		fsl,pins = <
+-			MX8MP_IOMUXC_GPIO1_IO05__GPIO1_IO05	0x19
+-		>;
+-	};
+-};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi2.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi2.dts
+index 40d03ee07c61..cee60410f206 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi2.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi2.dts
+@@ -22,10 +22,12 @@ ov5640_0: ov5640_mipi@3c {
+ };
+ 
+ &i2c3 {
++	clock-frequency = <400000>;
+ 	/delete-node/ ov5640_mipi@3c;
+ 
+ 	ov5640_otp_1: eeprom@54 {
+ 		compatible = "atmel,24c64";
++		pagesize = <128>;
+ 		reg = <0x54>;
+ 		//read-only;
+ 	};
+@@ -34,14 +36,14 @@ tevi_ov5640_mipi@3c {
+ 		compatible = "ovti,ov5640";
+ 		reg = <0x3c>;
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_csi1_pwn>, <&pinctrl_csi0_rst>;
++		pinctrl-0 = <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>;
+ 		clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
+ 		clock-names = "xclk";
+ 		assigned-clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
+ 		assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
+ 		assigned-clock-rates = <24000000>;
+ 		csi_id = <0>;
+-		powerdown-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
++		powerdown-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+ 		reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
+ 		mclk = <24000000>;
+ 		mclk_source = <0>;
+@@ -60,12 +62,8 @@ ov5640_mipi_1_ep: endpoint {
+ 	};
+ };
+ 
+-&iomuxc {
+-	pinctrl_csi1_pwn: csi1_pwn_grp {
+-		fsl,pins = <
+-			MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07	0x19
+-		>;
+-	};
++&isi_0 {
++	status = "disabled";
+ };
+ 
+ &isi_1 {
+-- 
+2.25.1
+

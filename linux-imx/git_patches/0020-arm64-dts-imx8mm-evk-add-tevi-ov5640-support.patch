@@ -1,0 +1,108 @@
+From 67a93fb346e4c1e74bee45dfc23dba269d0f30ce Mon Sep 17 00:00:00 2001
+From: Wig Cheng <wig.cheng@technexion.com>
+Date: Thu, 23 Dec 2021 17:40:16 +0800
+Subject: [PATCH 20/23] arm64: dts: imx8mm-evk: add tevi-ov5640 support
+
+---
+ arch/arm64/boot/dts/freescale/Makefile        |  1 +
+ .../dts/freescale/imx8mm-evk-tevi-ov5640.dts  | 76 +++++++++++++++++++
+ 2 files changed, 77 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-evk-tevi-ov5640.dts
+
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index ef3d54be6d6f..085505959e8b 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -73,6 +73,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk-rpmsg-wm8524.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk-ak4497.dtb imx8mm-evk-ak5558.dtb imx8mm-evk-audio-tdm.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk-8mic-revE.dtb imx8mm-evk-8mic-swpdm.dtb \
+ 			  imx8mm-evk-iqaudio-dacplus.dtb imx8mm-evk-iqaudio-dacpro.dtb imx8mm-evk-hifiberry-dacplus.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk-tevi-ov5640.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-ddr4-evk.dtb imx8mm-ddr4-evk-rm67191.dtb imx8mm-ddr4-evk-revb.dtb \
+ 			  imx8mm-ddr4-evk-revb-rm67191.dtb imx8mm-ddr4-evk-root.dtb \
+ 			  imx8mm-ddr4-evk-pcie-ep.dtb \
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-tevi-ov5640.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-tevi-ov5640.dts
+new file mode 100644
+index 000000000000..6373f194d7a6
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-tevi-ov5640.dts
+@@ -0,0 +1,76 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2021 Technexion Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#include "imx8mm-evk.dts"
++
++&pcie0{
++	status = "disabled";
++};
++
++&csi1_bridge {
++	fsl,mipi-mode;
++	status = "okay";
++	port {
++		csi1_ep: endpoint {
++			remote-endpoint = <&csi1_mipi_ep>;
++		};
++	};
++};
++
++&mipi_csi_1 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++	port {
++		mipi1_sensor_ep: endpoint@1 {
++			remote-endpoint = <&ov5640_mipi1_ep>;
++			data-lanes = <2>;
++			csis-hs-settle = <13>;
++			csis-clk-settle = <2>;
++			csis-wclk;
++		};
++
++		csi1_mipi_ep: endpoint@2 {
++			remote-endpoint = <&csi1_ep>;
++		};
++	};
++};
++
++&i2c3 {
++	/delete-node/ ov5640_mipi@3c;
++
++	tev_ov5640_mipi@3c {
++		compatible = "ovti,ov5640_mipi";
++		reg = <0x3c>;
++		status = "okay";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_csi_pwn>, <&pinctrl_csi_rst>;
++		clocks = <&clk IMX8MM_CLK_CLKO1>;
++		clock-names = "csi_mclk";
++		assigned-clocks = <&clk IMX8MM_CLK_CLKO1>;
++		assigned-clock-parents = <&clk IMX8MM_CLK_24M>;
++		assigned-clock-rates = <24000000>;
++		csi_id = <0>;
++		pwn-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
++		rst-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
++		mclk = <24000000>;
++		mclk_source = <0>;
++		port {
++			ov5640_mipi1_ep: endpoint {
++				remote-endpoint = <&mipi1_sensor_ep>;
++			};
++		};
++	};
++};
+-- 
+2.25.1
+

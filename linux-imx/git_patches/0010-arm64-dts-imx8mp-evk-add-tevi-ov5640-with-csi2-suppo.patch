@@ -1,0 +1,114 @@
+From 4ef80f979f3b224dedff911877378abe86203f92 Mon Sep 17 00:00:00 2001
+From: Wig Cheng <wig.cheng@technexion.com>
+Date: Mon, 22 Nov 2021 18:40:25 +0800
+Subject: [PATCH 10/23] arm64: dts: imx8mp-evk: add tevi-ov5640 with csi2
+ support
+
+---
+ .../freescale/imx8mp-evk-tevi-ov5640-csi2.dts | 94 +++++++++++++++++++
+ 1 file changed, 94 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi2.dts
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi2.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi2.dts
+new file mode 100644
+index 000000000000..40d03ee07c61
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-tevi-ov5640-csi2.dts
+@@ -0,0 +1,94 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2021 Technexion Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#include "imx8mp-evk.dts"
++
++&i2c2 {
++	ov5640_0: ov5640_mipi@3c {
++		status = "disabled";
++	};
++};
++
++&i2c3 {
++	/delete-node/ ov5640_mipi@3c;
++
++	ov5640_otp_1: eeprom@54 {
++		compatible = "atmel,24c64";
++		reg = <0x54>;
++		//read-only;
++	};
++
++	tevi_ov5640_mipi@3c {
++		compatible = "ovti,ov5640";
++		reg = <0x3c>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_csi1_pwn>, <&pinctrl_csi0_rst>;
++		clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
++		clock-names = "xclk";
++		assigned-clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
++		assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
++		assigned-clock-rates = <24000000>;
++		csi_id = <0>;
++		powerdown-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
++		mclk = <24000000>;
++		mclk_source = <0>;
++		mipi_csi;
++		nvmem = <&ov5640_otp_1>;
++		nvmem-names = "calib-data";
++		status = "okay";
++
++		port {
++			ov5640_mipi_1_ep: endpoint {
++				remote-endpoint = <&mipi_csi1_ep>;
++				data-lanes = <1 2>;
++				clock-lanes = <0>;
++			};
++		};
++	};
++};
++
++&iomuxc {
++	pinctrl_csi1_pwn: csi1_pwn_grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07	0x19
++		>;
++	};
++};
++
++&isi_1 {
++	status = "okay";
++};
++
++&mipi_csi_0 {
++	status = "disabled";
++};
++
++&mipi_csi_1 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	port@1 {
++		reg = <1>;
++		mipi_csi1_ep: endpoint {
++			remote-endpoint = <&ov5640_mipi_1_ep>;
++			data-lanes = <2>;
++			csis-hs-settle = <13>;
++			csis-clk-settle = <2>;
++			csis-wclk;
++		};
++	};
++};
+-- 
+2.25.1
+

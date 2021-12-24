@@ -1,0 +1,378 @@
+From 043ac5399b7036fe154f21280437a6fd46803404 Mon Sep 17 00:00:00 2001
+From: Wig Cheng <wig.cheng@technexion.com>
+Date: Thu, 23 Dec 2021 17:41:34 +0800
+Subject: [PATCH 21/23] arm64: dts: add tevi series to imx8mn-evk support list
+
+Include tevi-ov5640, tevi-ar0521, tevi-ar0144 and tevi-ar0234 camera
+sensors.
+---
+ arch/arm64/boot/dts/freescale/Makefile        |  1 +
+ .../dts/freescale/imx8mn-evk-tevi-ar0144.dts  | 82 +++++++++++++++++++
+ .../dts/freescale/imx8mn-evk-tevi-ar0234.dts  | 82 +++++++++++++++++++
+ .../dts/freescale/imx8mn-evk-tevi-ar0521.dts  | 82 +++++++++++++++++++
+ .../dts/freescale/imx8mn-evk-tevi-ov5640.dts  | 74 +++++++++++++++++
+ 5 files changed, 321 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-evk-tevi-ar0144.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-evk-tevi-ar0234.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-evk-tevi-ar0521.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-evk-tevi-ov5640.dts
+
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 085505959e8b..4febbbce0fa4 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -92,6 +92,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-evk.dtb imx8mn-evk-rm67191.dtb imx8mn-evk-rpmsg
+ dtb-$(CONFIG_ARCH_MXC) += imx8mn-ddr4-evk.dtb imx8mn-ddr4-evk-ak5558.dtb imx8mn-ddr4-evk-rm67191.dtb \
+ 			  imx8mn-ddr4-evk-rpmsg.dtb imx8mn-ddr4-evk-usd-wifi.dtb imx8mn-ddr4-evk-rm67199.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mn-ddr4-evk-root.dtb imx8mn-ddr4-evk-inmate.dtb imx8mn-evk-root.dtb imx8mn-evk-inmate.dtb imx8mn-evk-lk.dtb imx8mn-ddr4-evk-lk.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mn-evk-tevi-ov5640.dtb imx8mn-evk-tevi-ar0521.dtb imx8mn-evk-tevi-ar0234.dtb imx8mn-evk-tevi-ar0144.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mn-ab2.dtb imx8mn-ddr4-ab2.dtb imx8mn-ddr3l-ab2.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mn-var-som-symphony.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb imx8mp-evk-rm67191.dtb imx8mp-evk-it6263-lvds-dual-channel.dtb \
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk-tevi-ar0144.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk-tevi-ar0144.dts
+new file mode 100644
+index 000000000000..6b9b2c78ba23
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk-tevi-ar0144.dts
+@@ -0,0 +1,82 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2021 Technexion Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#include "imx8mn-evk.dts"
++
++&i2c3 {
++	clock-frequency = <400000>;
++	/delete-node/ ov5640_mipi@3c;
++
++	tevi_ar0144_otp_0: eeprom@54 {
++		compatible = "atmel,24c1024";
++		reg = <0x54>;
++		pagesize = <128>;
++		//read-only;
++	};
++
++	tevi_ar0144_0: tevi_ar0144@3d {
++		compatible = "tn,tevi-ar0144";
++		reg = <0x3d>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_csi_pwn>, <&pinctrl_csi_rst>, <&pinctrl_csi_device_pwr_dummy>;
++		host-power-gpios = <&gpio1 14 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
++		device-power-gpios = <&gpio5 28 GPIO_ACTIVE_HIGH>;
++		standby-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
++
++		nvmem = <&tevi_ar0144_otp_0>;
++		nvmem-names = "calib-data";
++		status = "okay";
++
++		port {
++			tevi_ar0144_0_ep: endpoint {
++				remote-endpoint = <&mipi_csi0_ep>;
++			};
++		};
++	};
++};
++
++&mipi_csi_1 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	port@0 {
++		reg = <0>;
++		mipi_csi0_ep: endpoint {
++			remote-endpoint = <&tevi_ar0144_0_ep>;
++			data-lanes = <4>;
++			csis-hs-settle = <13>;
++			csis-clk-settle = <2>;
++			csis-wclk;
++		};
++	};
++};
++
++
++&iomuxc {
++	pinctrl_csi_rst: csi_rst_grp {
++		fsl,pins = <
++			MX8MN_IOMUXC_GPIO1_IO06_GPIO1_IO6	0x19 /* RESET pin */
++			MX8MN_IOMUXC_GPIO1_IO14_GPIO1_IO14	0x19 /* CLK pin for dummy host power pin */
++		>;
++	};
++
++	pinctrl_csi_device_pwr_dummy: csi_device_pwr_dummy_grp {
++		fsl,pins = <
++			MX8MN_IOMUXC_UART4_RXD_GPIO5_IO28	0x9 /* dummy pin for device power pin */
++		>;
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk-tevi-ar0234.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk-tevi-ar0234.dts
+new file mode 100644
+index 000000000000..8aa0be309e7f
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk-tevi-ar0234.dts
+@@ -0,0 +1,82 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2021 Technexion Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#include "imx8mn-evk.dts"
++
++&i2c3 {
++	clock-frequency = <400000>;
++	/delete-node/ ov5640_mipi@3c;
++
++	tevi_ar0234_otp_0: eeprom@54 {
++		compatible = "atmel,24c1024";
++		reg = <0x54>;
++		pagesize = <128>;
++		//read-only;
++	};
++
++	tevi_ar0234_0: tevi_ar0234@3d {
++		compatible = "tn,tevi-ar0234";
++		reg = <0x3d>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_csi_pwn>, <&pinctrl_csi_rst>, <&pinctrl_csi_device_pwr_dummy>;
++		host-power-gpios = <&gpio1 14 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
++		device-power-gpios = <&gpio5 28 GPIO_ACTIVE_HIGH>;
++		standby-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
++
++		nvmem = <&tevi_ar0234_otp_0>;
++		nvmem-names = "calib-data";
++		status = "okay";
++
++		port {
++			tevi_ar0234_0_ep: endpoint {
++				remote-endpoint = <&mipi_csi0_ep>;
++			};
++		};
++	};
++};
++
++&mipi_csi_1 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	port@0 {
++		reg = <0>;
++		mipi_csi0_ep: endpoint {
++			remote-endpoint = <&tevi_ar0234_0_ep>;
++			data-lanes = <4>;
++			csis-hs-settle = <13>;
++			csis-clk-settle = <2>;
++			csis-wclk;
++		};
++	};
++};
++
++
++&iomuxc {
++	pinctrl_csi_rst: csi_rst_grp {
++		fsl,pins = <
++			MX8MN_IOMUXC_GPIO1_IO06_GPIO1_IO6	0x19 /* RESET pin */
++			MX8MN_IOMUXC_GPIO1_IO14_GPIO1_IO14	0x19 /* CLK pin for dummy host power pin */
++		>;
++	};
++
++	pinctrl_csi_device_pwr_dummy: csi_device_pwr_dummy_grp {
++		fsl,pins = <
++			MX8MN_IOMUXC_UART4_RXD_GPIO5_IO28	0x9 /* dummy pin for device power pin */
++		>;
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk-tevi-ar0521.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk-tevi-ar0521.dts
+new file mode 100644
+index 000000000000..2b9bca2977c5
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk-tevi-ar0521.dts
+@@ -0,0 +1,82 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2021 Technexion Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#include "imx8mn-evk.dts"
++
++&i2c3 {
++	clock-frequency = <400000>;
++	/delete-node/ ov5640_mipi@3c;
++
++	tevi_ar0521_otp_0: eeprom@54 {
++		compatible = "atmel,24c1024";
++		reg = <0x54>;
++		pagesize = <128>;
++		//read-only;
++	};
++
++	tevi_ar0521_0: tevi_ar0521@3d {
++		compatible = "tn,tevi-ar0521";
++		reg = <0x3d>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_csi_pwn>, <&pinctrl_csi_rst>, <&pinctrl_csi_device_pwr_dummy>;
++		host-power-gpios = <&gpio1 14 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
++		device-power-gpios = <&gpio5 28 GPIO_ACTIVE_HIGH>;
++		standby-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
++
++		nvmem = <&tevi_ar0521_otp_0>;
++		nvmem-names = "calib-data";
++		status = "okay";
++
++		port {
++			tevi_ar0521_0_ep: endpoint {
++				remote-endpoint = <&mipi_csi0_ep>;
++			};
++		};
++	};
++};
++
++&mipi_csi_1 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	port@0 {
++		reg = <0>;
++		mipi_csi0_ep: endpoint {
++			remote-endpoint = <&tevi_ar0521_0_ep>;
++			data-lanes = <4>;
++			csis-hs-settle = <13>;
++			csis-clk-settle = <2>;
++			csis-wclk;
++		};
++	};
++};
++
++
++&iomuxc {
++	pinctrl_csi_rst: csi_rst_grp {
++		fsl,pins = <
++			MX8MN_IOMUXC_GPIO1_IO06_GPIO1_IO6	0x19 /* RESET pin */
++			MX8MN_IOMUXC_GPIO1_IO14_GPIO1_IO14	0x19 /* CLK pin for dummy host power pin */
++		>;
++	};
++
++	pinctrl_csi_device_pwr_dummy: csi_device_pwr_dummy_grp {
++		fsl,pins = <
++			MX8MN_IOMUXC_UART4_RXD_GPIO5_IO28	0x9 /* dummy pin for device power pin */
++		>;
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk-tevi-ov5640.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk-tevi-ov5640.dts
+new file mode 100644
+index 000000000000..1f6a47546e18
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk-tevi-ov5640.dts
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2021 Technexion Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#include "imx8mn-evk.dts"
++
++&i2c3 {
++	clock-frequency = <400000>;
++	/delete-node/ ov5640_mipi@3c;
++
++	ov5640_otp_0: eeprom@54 {
++		compatible = "atmel,24c64";
++		pagesize = <128>;
++		reg = <0x54>;
++		//read-only;
++	};
++
++	tevi_ov5640_mipi@3c {
++		compatible = "ovti,ov5640";
++		reg = <0x3c>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_csi_pwn>, <&pinctrl_csi_rst>;
++		clocks = <&clk IMX8MN_CLK_CLKO1>;
++		clock-names = "xclk";
++		assigned-clocks = <&clk IMX8MN_CLK_CLKO1>;
++		assigned-clock-parents = <&clk IMX8MN_CLK_24M>;
++		assigned-clock-rates = <24000000>;
++		csi_id = <0>;
++		powerdown-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
++		rst-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
++		mclk = <24000000>;
++		mclk_source = <0>;
++		mipi_csi;
++		nvmem = <&ov5640_otp_0>;
++		nvmem-names = "calib-data";
++		status = "okay";
++
++		port {
++			ov5640_mipi_0_ep: endpoint {
++				remote-endpoint = <&mipi_csi0_ep>;
++				data-lanes = <1 2>;
++				clock-lanes = <0>;
++			};
++		};
++	};
++};
++
++&mipi_csi_1 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	port@0 {
++		reg = <0>;
++		mipi_csi0_ep: endpoint {
++			remote-endpoint = <&ov5640_mipi_0_ep>;
++			data-lanes = <2>;
++			csis-hs-settle = <13>;
++			csis-clk-settle = <2>;
++			csis-wclk;
++		};
++	};
++};
+-- 
+2.25.1
+

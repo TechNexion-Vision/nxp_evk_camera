@@ -1,0 +1,65 @@
+From 76f5230b59a5aeb30a319921da18dd847acd9c41 Mon Sep 17 00:00:00 2001
+From: Wig Cheng <wig.cheng@technexion.com>
+Date: Thu, 23 Dec 2021 17:58:39 +0800
+Subject: [PATCH 23/23] media: ov5640: separated bootdata loading per 8 bytes
+
+In order to match transfer buffer of  imx8ulp-evk with i2c-rpbus, need
+resize the read/write size less then 16 bytes, it's rpbus limitation.
+
+tevi-ov5640 has no much data, so this change has no side effect for
+other platforms (already tested).
+---
+ drivers/media/i2c/ov5640.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index d54b27e30cee..9a7c962da291 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -98,6 +98,8 @@
+ #define OV5640_REG_SDE_CTRL5		0x5585
+ #define OV5640_REG_AVG_READOUT		0x56a1
+ 
++#define OV5640_FW_LOAD_BYTE_LEN	(8)
++
+ enum ov5640_mode_id {
+ 	OV5640_MODE_QQVGA_160_120 = 0,
+ 	OV5640_MODE_QCIF_176_144,
+@@ -1927,7 +1929,7 @@ static void ov5640_read_otp(struct ov5640_dev *sensor)
+ 	struct i2c_client *client = sensor->i2c_client;
+ 	struct nvmem_device *otp_flash_nvmem;
+ 	int __sum;
+-	int i;
++	int i, j;
+ 	u8 header_version;
+ 	u8 product_name_len;
+ 	u8 *product_name;
+@@ -1935,6 +1937,7 @@ static void ov5640_read_otp(struct ov5640_dev *sensor)
+ 	u32 otp_data_len;
+ 	u8 otp_data_checksum;
+ 	u8 *otp_data;
++	u8 otp_data_s[241][OV5640_FW_LOAD_BYTE_LEN];
+ 
+ 	otp_flash_nvmem = devm_nvmem_device_get(&client->dev, "calib-data");
+ 	if (IS_ERR(otp_flash_nvmem)) {
+@@ -1954,9 +1957,15 @@ static void ov5640_read_otp(struct ov5640_dev *sensor)
+ 				  4, (u8 *)&otp_data_len);
+ 		nvmem_device_read(otp_flash_nvmem, 2 + product_name_len + 1 + 4,
+ 				  1, (u8 *)&otp_data_checksum);
++
+ 		otp_data = devm_kmalloc(&client->dev, otp_data_len, GFP_KERNEL);
+-		nvmem_device_read(otp_flash_nvmem, 2 + product_name_len + 1 + 4 + 1,
+-				  otp_data_len, otp_data);
++
++		for( i = 0; i < 241; i++) {
++			nvmem_device_read(otp_flash_nvmem, 2 + product_name_len + 1 + 4 + (i*OV5640_FW_LOAD_BYTE_LEN+1),
++					  OV5640_FW_LOAD_BYTE_LEN, otp_data_s[i]);
++			for (j = 0; j < OV5640_FW_LOAD_BYTE_LEN; j++)
++				otp_data[i*OV5640_FW_LOAD_BYTE_LEN+j] = otp_data_s[i][j];
++		}
+ 
+ 		dev_info(&client->dev, "Product name: %s, Version %d\n",
+ 			 product_name, product_version);
+-- 
+2.25.1
+
