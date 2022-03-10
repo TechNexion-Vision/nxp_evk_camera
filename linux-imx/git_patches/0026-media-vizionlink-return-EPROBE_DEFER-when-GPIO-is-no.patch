@@ -1,0 +1,43 @@
+From a0883c290966c0476b0f01070c4e9d0dc61ea114 Mon Sep 17 00:00:00 2001
+From: Richard Hu <richard.hu@technexion.com>
+Date: Mon, 27 Dec 2021 16:53:36 +0800
+Subject: [PATCH 26/28] media: vizionlink: return -EPROBE_DEFER when GPIO is
+ not available yet.
+
+In some cases, control GPIO is from GPIO expander. If the I2C bus number of GPIO expander is behind
+vizionlink, GPIO expander will be initialized after vizionlink. It makes vizionlink fails to get
+GPIO. If driver returns -EPROBE_DEFER, it will be probed later when GPIO is available.
+---
+ drivers/media/i2c/vizionlink/vizionlink_host.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/i2c/vizionlink/vizionlink_host.c b/drivers/media/i2c/vizionlink/vizionlink_host.c
+index c07d968b0c60..515a412d84cd 100644
+--- a/drivers/media/i2c/vizionlink/vizionlink_host.c
++++ b/drivers/media/i2c/vizionlink/vizionlink_host.c
+@@ -371,6 +371,7 @@ static int vh_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ {
+ 	struct vh_st *obj = NULL;
+ 	u32 temp;
++	int error;
+ 
+ 	dev_info(&client->dev, "%s\n", client->dev.of_node->full_name);
+ 
+@@ -394,9 +395,12 @@ static int vh_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 
+ 	obj->pdb_gpio = devm_gpiod_get(&client->dev, "pdb", GPIOD_OUT_LOW);
+ 	if (IS_ERR(obj->pdb_gpio)) {
+-		dev_err(&client->dev,
++		error = PTR_ERR(obj->pdb_gpio);
++		if (error != EPROBE_DEFER)
++			dev_err(&client->dev,
+ 			"Failed to get gpio pin setting 'pdb'\n");
+-		return -EINVAL;
++
++		return error;
+ 	}
+ 
+ 	if (vh_is_exist(obj) != 0) {
+-- 
+2.25.1
+

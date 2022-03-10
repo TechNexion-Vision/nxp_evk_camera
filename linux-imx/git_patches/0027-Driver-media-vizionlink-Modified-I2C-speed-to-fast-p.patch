@@ -1,0 +1,26 @@
+From ac66c40df45b148262df9d75b8447754120dc11b Mon Sep 17 00:00:00 2001
+From: JerryLiu <jerry.liu@technexion.com>
+Date: Tue, 28 Dec 2021 11:13:12 +0800
+Subject: [PATCH 27/28] Driver: media: vizionlink: Modified I2C speed to fast
+ plus mode for vizionlink.
+
+---
+ drivers/media/i2c/vizionlink/vizionlink_cam.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/media/i2c/vizionlink/vizionlink_cam.c b/drivers/media/i2c/vizionlink/vizionlink_cam.c
+index 74a6482ae20f..52f3d279d8ee 100644
+--- a/drivers/media/i2c/vizionlink/vizionlink_cam.c
++++ b/drivers/media/i2c/vizionlink/vizionlink_cam.c
+@@ -10,6 +10,8 @@ struct __reg8b_v {
+ };
+ 
+ static struct __reg8b_v __i2c_setting[] = {
++	{0x0B, 0x06},
++	{0x0C, 0x0B},
+ 	{0x0D, 0x00},
+ 	{0x0E, 0x00},
+ 	{0x1C, 0x7F},
+-- 
+2.25.1
+

@@ -1,0 +1,24 @@
+From 7bd2e8cce1319a2a6eac7c3b55962ec6f5b9cb9e Mon Sep 17 00:00:00 2001
+From: JerryLiu <jerry.liu@technexion.com>
+Date: Fri, 26 Nov 2021 14:35:20 +0800
+Subject: [PATCH 25/28] media: vizionlink: set csi-2 transmitter speed to 1.6G.
+
+---
+ drivers/media/i2c/vizionlink/vizionlink_host.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/media/i2c/vizionlink/vizionlink_host.c b/drivers/media/i2c/vizionlink/vizionlink_host.c
+index 32c8a0098d17..c07d968b0c60 100644
+--- a/drivers/media/i2c/vizionlink/vizionlink_host.c
++++ b/drivers/media/i2c/vizionlink/vizionlink_host.c
+@@ -30,6 +30,7 @@ static struct __reg8b_v __9096x_i2c_setting [] = {
+ 
+ 	{.reg = 0x32, .value = 0x01}, //CSI_PORT_SEL
+ 	{.reg = 0x33, .value = 0x20}, //CSI_CTL
++	{.reg = 0x1F, .value = 0x00}, //CSI_PLL_CTL
+ 
+ 	//Port config/setting
+ 	{.reg = 0x4C, .value = 0x01}, //FPD3_PORT_SEL,Port 0
+-- 
+2.25.1
+
