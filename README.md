@@ -1,4 +1,4 @@
-NXP IMX8 EVK with TEVI camera support
+TEVI-AR camera on NXP 8MPLUSLPD4-EVK board
 ===========================
 
 [![Producer: Technexion](https://img.shields.io/badge/Producer-Technexion-blue.svg)](https://www.technexion.com)
@@ -6,15 +6,20 @@ NXP IMX8 EVK with TEVI camera support
 ![](https://img.shields.io/badge/Release-REV01-green.svg)
 
 
-## Support Hardware
+## Supported TEVI-AR CAM Modules
 |NXP EVK| Support Module |
 |---|---|
-|8MPLUSLPD4-EVK|  TEVI-OV5640 <br> TEVI-AR0144 <br> TEVI-AR0234 <br> TEVI-AR0521 <br> TEVI-AR0522 <br> TEVI-AR0821 <br> TEVI-AR1335 <br> TEVI-AR1820 <br> |
+|8MPLUSLPD4-EVK| TEVI-AR0144 <br> TEVI-AR0234 <br> TEVI-AR0521 <br> TEVI-AR0522 <br> TEVI-AR0821 <br> TEVI-AR1335 <br> TEVI-AR1820 <br> |
 
 
-## BSP Requirement
-[Yocto 3.3 with Kernel 5.10.x](https://www.nxp.com/design/software/embedded-software/i-mx-software/embedded-linux-for-i-mx-applications-processors:IMXLINUX?tab=In-Depth_Tab)<br>
+## Develop Linux kernel
+Supported TechNexion Linux kernel branch for TEVI and Vizionlink cameras
+| Linux | branch |
+| --- | --- |
+| 5.10.72 | tn-imx_5.10.72_2.2.0-next |
+
+Fetch Yocto source <br>
 [TechNexion Yocto 3.3 Hardknott 5.10.y GA BSP](https://github.com/TechNexion/tn-imx-yocto-manifest)
 
-## User guide
-[How to boot up TEVI camera](https://developer.technexion.com/preview/v1/23c23967-3f23-455e-a931-61405cf47add/1)
+## User Guide
+[How to boot up TEVI-AR camera](https://developer.technexion.com/docs/tevi-ar-cam-on-nxp-8mpluslpd4-evk-board)
