@@ -41,8 +41,8 @@ SD card capacity must be > 8GB and then Flash image to SD card.
   ```
   **2.  Copy to your kernel source code.**
   ```
-  ~/nxp_evk_camera$ mv -r driver/media/i2c/tevs/ <fatch_kernel_folder>/driver/media/i2c/
-  ~/nxp_evk_camera$ mv arch/arm64/boot/dts/freescale/imx8mp-evk-tevs.dts <fatch_kernel_folder>/arch/arm64/boot/dts/freescale/
+  ~/nxp_evk_camera$ cp -r driver/media/i2c/tevs/ <fetch_kernel_folder>/driver/media/i2c/
+  ~/nxp_evk_camera$ cp arch/arm64/boot/dts/freescale/imx8mp-evk-tevs.dts <fetch_kernel_folder>/arch/arm64/boot/dts/freescale/
   ```
   **3.  Modify makefile to add driver**
   ```
