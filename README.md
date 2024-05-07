@@ -46,8 +46,8 @@ SD card capacity must be > 8GB and then Flash image to SD card.
   ```
   **3.  Modify makefile to add driver**
   ```
-  $ cd <fatch_kernel_folder>/driver/media/i2c/
-  ~/<fatch_kernel_folder>/driver/media/i2c/$ vi Makefile
+  $ cd <fetch_kernel_folder>/driver/media/i2c/
+  ~/<fetch_kernel_folder>/driver/media/i2c/$ vi Makefile
   ```
   Add this line in Makefile.
   ```
@@ -58,7 +58,7 @@ SD card capacity must be > 8GB and then Flash image to SD card.
   
   Modify Kconfig to add camera config
   ```
-  ~/<fatch_kernel_folder>/driver/media/i2c/$ vi Kconfig
+  ~/<fetch_kernel_folder>/driver/media/i2c/$ vi Kconfig
   ```
   Add this part under "Camera sensor devices" menu in Kconfig.
   ```
@@ -78,7 +78,7 @@ SD card capacity must be > 8GB and then Flash image to SD card.
   
   **4.  Modify makefile to add device tree.**
   ```
-  $ cd <fatch_kernel_folder>/arch/arm64/boot/dts/freescale/
+  $ cd <fetch_kernel_folder>/arch/arm64/boot/dts/freescale/
   ~/<fatch_kernel_folder>/arch/arm64/boot/dts/freescale/$ vi Makefile
   ```
   Add this line in Makefile.
@@ -90,7 +90,7 @@ SD card capacity must be > 8GB and then Flash image to SD card.
   <br/>
   
   **5.  Compile the kernel & module driver**<br/>
-  Finally you can start comile your new Image files, then copy and replace the Image files in the SD card.<br/>
+  Finally, you can start compiling your new Image files, then copy and replace the Image files in the SD card.<br/>
 
 
 ## Instructions for testing camera
