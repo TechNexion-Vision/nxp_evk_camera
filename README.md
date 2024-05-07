@@ -35,14 +35,14 @@ SD card capacity must be > 8GB and then Flash image to SD card.
   If using TechNexion's Prebuilt demo image or build form TechNexion BSP release, it's already installed so you can skip this topic.<br/><br/>
   **1. Download the camera driver and device tree blobs.**
   ```
-  $ git clone git@github.com:TechNexion-Vision/imx8_evk_tevi.git
-  $ cd imx8_evk_camera/
-  ~/imx8_evk_camera$ git checkout tn-imx_5.15.71_2.2.0-stable
+  $ git clone https://github.com/TechNexion-Vision/nxp_evk_camera.git
+  $ cd nxp_evk_camera/
+  ~/nxp_evk_camera$ git checkout tn-imx_5.15.71_2.2.0-stable
   ```
   **2.  Copy to your kernel source code.**
   ```
-  ~/imx8_evk_camera$ mv -r driver/media/i2c/tevs/ <fatch_kernel_folder>/driver/media/i2c/
-  ~/imx8_evk_camera$ mv arch/arm64/boot/dts/freescale/imx8mp-evk-tevs.dts <fatch_kernel_folder>/arch/arm64/boot/dts/freescale/
+  ~/nxp_evk_camera$ mv -r driver/media/i2c/tevs/ <fatch_kernel_folder>/driver/media/i2c/
+  ~/nxp_evk_camera$ mv arch/arm64/boot/dts/freescale/imx8mp-evk-tevs.dts <fatch_kernel_folder>/arch/arm64/boot/dts/freescale/
   ```
   **3.  Modify makefile to add driver**
   ```
