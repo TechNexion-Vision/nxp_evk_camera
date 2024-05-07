@@ -118,17 +118,17 @@ Get the device number of camera capture device.
 mxc-isi-cap (platform:32e00000.isi:cap_devic):
        /dev/video{X}
   ```
-The following is example.<br/>
+The following is an example.<br/>
 
 <image src="https://github.com/TechNexion-Vision/imx8_evk_tevi/assets/57210123/3d3e9cee-bed8-4a54-b471-17f7f8ad267d"  width="480">
 
-Specify the capture device you just get and start gstreamer to get video stream on screen :
+Specify the capture device you just get and start Gstreamer to get video stream on screen :
   ```
 $ gst-launch-1.0 v4l2src device=/dev/video{X} ! video/x-raw,width=<x>,height=<y> ! waylandsink
   ```
 
 ## Additional information
 
-[NXP 8MPLUSLPD4-EVK board TEVI Camera Usage Guide](https://developer.technexion.com/docs/nxp-8mpluslpd4-evk-board-tevi-camera-usage-guide)
+[NXP 8MPLUSLPD4-EVK board TEVS Camera Usage Guide](https://developer.technexion.com/docs/nxp-8mpluslpd4-evk-board-tevs-camera-usage-guide)
 
 <br/><br/><br/><br/><br/>
