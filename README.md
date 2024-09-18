@@ -7,7 +7,7 @@
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 <br/><br/>
 ## Overview
-Driver has been developed by TechNexion as an initiative in order to bootup Technexion MIPI-CSI2 cameras for NXP 8MPLUSLPD4-EVK board with Yocto 4.0 and kernel L5.15.71_2.2.2_MX8MP
+Driver has been developed by TechNexion as an initiative in order to bootup Technexion MIPI-CSI2 cameras for NXP 8MPLUSLPD4-EVK board with Yocto 4.2 and kernel L6.1.55_2.2.0_MX8MP
 ## Prerequisites
 + **NXP i.MX 8M Plus EVK**： [8MPLUSLPD4-EVK](https://www.nxp.com/design/design-center/development-boards/i-mx-evaluation-and-development-boards/evaluation-kit-for-the-i-mx-8m-plus-applications-processor:8MPLUSLPD4-EVK)
 + **camera + MINI-SAS Cable**： [camera with NXP EVK](https://www.technexion.com/?s=NXP+i.MX8+EVK&post_type=product)<br/>
@@ -18,8 +18,8 @@ There are 3 options to get an image, we suggest using first one is the most easy
   1. Using TechNexion's Prebuilt demo image, which contains the required device tree blobs and camera driver.<br/>
       It can be available for download via TechNexion's server： [Image Download Link](https://download.technexion.com/demo_software/EVK/NXP/)<br/>
     1. If you want to build a Yocto Project image by yourself, TechNexion BSP release providing support NXP i.mx series processors：<br/>
-        [Fetch Yocto source](https://github.com/TechNexion/tn-imx-yocto-manifest/tree/kirkstone_5.15.y-stable)<br/>
-        [Build Yocto](https://github.com/TechNexion/tn-imx-yocto-manifest/tree/hardknott_5.10.y-next#for-nxp-imx8mp-evk-with-technexion-tevi-and-vizionlink-camera-support)<br/>
+        [Fetch Yocto source](https://github.com/TechNexion/tn-imx-yocto-manifest/tree/mickledore_6.1.y-stable)<br/>
+        [Build Yocto](https://github.com/TechNexion/tn-imx-yocto-manifest/tree/mickledore_6.1.y-stable#for-nxp-imx8mp-evk-with-technexion-tevi-and-vizionlink-camera-support)<br/>
     1. You can following the NXP's requirements for Yocto Project BSP： [i.MX Yocto Project User's Guide](https://www.nxp.com/docs/en/user-guide/IMX_YOCTO_PROJECT_USERS_GUIDE.pdf)<br/>
 + **SD Card** <br/>
 SD card capacity must be > 8GB and then Flash image to SD card.
@@ -37,7 +37,7 @@ SD card capacity must be > 8GB and then Flash image to SD card.
   ```
   $ git clone https://github.com/TechNexion-Vision/nxp_evk_camera.git
   $ cd nxp_evk_camera/
-  ~/nxp_evk_camera$ git checkout tn-imx_5.15.71_2.2.0-stable
+  ~/nxp_evk_camera$ git checkout tn-imx_6.1.55_2.2.0-stable
   ```
   **2.  Copy to your kernel source code.**
   ```
@@ -54,8 +54,8 @@ SD card capacity must be > 8GB and then Flash image to SD card.
   obj-$(CONFIG_VIDEO_TEVS) += tevs/
   ```
   > [!NOTE]
-  > you can refer to [linux-tn-imx/drivers/media/i2c/Makefile](https://github.com/TechNexion/linux-tn-imx/blob/tn-imx_5.15.71_2.2.0-next/drivers/media/i2c/Makefile)
-  
+  > you can refer to [linux-tn-imx/drivers/media/i2c/Makefile](https://github.com/TechNexion/linux-tn-imx/blob/tn-imx_6.1.55_2.2.0-stable/drivers/media/i2c/Makefile)
+
   Modify Kconfig to add camera config
   ```
   ~/<fetch_kernel_folder>/driver/media/i2c/$ vi Kconfig
@@ -65,7 +65,7 @@ SD card capacity must be > 8GB and then Flash image to SD card.
   config VIDEO_TEVS
     tristate "TechNexion TEVS sensor support"
     depends on OF
-    depends on GPIOLIB && VIDEO_V4L2 && I2C && VIDEO_V4L2_SUBDEV_API
+    depends on GPIOLIB && I2C && VIDEO_V4L2_SUBDEV_API
     depends on MEDIA_CAMERA_SUPPORT
     default y
     select V4L2_FWNODE
@@ -74,8 +74,8 @@ SD card capacity must be > 8GB and then Flash image to SD card.
       TEVS camera sensor with a MIPI CSI-2 interface.
   ```
   > [!NOTE]
-  > you can refer to [linux-tn-imx/drivers/media/i2c/Kconfig](https://github.com/TechNexion/linux-tn-imx/blob/tn-imx_5.15.71_2.2.0-next/drivers/media/i2c/Kconfig)
-  
+  > you can refer to [linux-tn-imx/drivers/media/i2c/Kconfig](https://github.com/TechNexion/linux-tn-imx/blob/tn-imx_6.1.55_2.2.0-stable/drivers/media/i2c/Kconfig)
+
   **4.  Modify makefile to add device tree.**
   ```
   $ cd <fetch_kernel_folder>/arch/arm64/boot/dts/freescale/
@@ -86,9 +86,9 @@ SD card capacity must be > 8GB and then Flash image to SD card.
   dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk-tevs.dtb
   ```
   > [!NOTE]
-  > you can refer to [linux-tn-imx/arch/arm64/boot/dts/freescale/Makefile](https://github.com/TechNexion/linux-tn-imx/tree/tn-imx_5.15.71_2.2.0-next/arch/arm64/boot/dts/freescale/Makefile)
+  > you can refer to [linux-tn-imx/arch/arm64/boot/dts/freescale/Makefile](https://github.com/TechNexion/linux-tn-imx/tree/tn-imx_6.1.55_2.2.0-stable/arch/arm64/boot/dts/freescale/Makefile)
   <br/>
-  
+
   **5.  Compile the kernel & module driver**<br/>
   Finally, you can start compiling your new Image files, then copy and replace the Image files in the SD card.<br/>
 
