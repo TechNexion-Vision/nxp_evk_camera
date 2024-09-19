@@ -18,11 +18,11 @@ You can find our camera products here：[MIPI-CSI2 Camera Module](https://www.te
 + **NXP i.MX 8M Nano**
 + **NXP i.MX 8M Quad**
 + **NXP i.MX 93**
-  
+
 ## Supported carrier boards
 This release have been tested with:
 + **NXP i.MX 8M Plus EVK**： [8MPLUSLPD4-EVK](https://www.nxp.com/design/design-center/development-boards/i-mx-evaluation-and-development-boards/evaluation-kit-for-the-i-mx-8m-plus-applications-processor:8MPLUSLPD4-EVK)<br/>
-+ **NXP i.MX 93 EVK**： [MCIMX93-EVK](https://www.technexion.com/?s=NXP+i.MX8+EVK&post_type=product)<br/>
++ **NXP i.MX 93 EVK**： [MCIMX93-EVK](https://www.nxp.com/design/design-center/development-boards-and-designs/i-mx-evaluation-and-development-boards/i-mx-93-evaluation-kit:i.MX93EVK)<br/>
 + **TechNexion’s Evaluation Kits**： [Evaluation Kits](https://www.technexion.com/products/system-on-modules/evk/)<br/>
 
 ## Get started
