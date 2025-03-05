@@ -45,8 +45,7 @@
 	#size-cells = <0>;
 	status = "okay";
 
-	port@0 {
-		reg = <0>;
+	port {
 		mipi_csi0_ep: endpoint {
 			remote-endpoint = <&tevs_0_ep>;
 			data-lanes = <4>;
@@ -90,6 +89,7 @@
 		host-power-gpios = <&gpio1 5 GPIO_ACTIVE_HIGH>;
 		reset-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
 		standby-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+		csi_id = <0>;
 		data-lanes = <4>;
 		data-frequency = <800>;
 		continuous-clock = <0>;
@@ -118,6 +118,7 @@
 		host-power-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
 		reset-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
 		standby-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+		csi_id = <1>;
 		data-lanes = <4>;
 		data-frequency = <800>;
 		continuous-clock = <0>;
