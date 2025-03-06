@@ -122,8 +122,8 @@ If you want to build a Yocto Project image by yourself, TechNexion BSP release p
     obj-$(CONFIG_VIDEO_TEVS) += tevs/
     ```
 
-    > [!NOTE]
-    > you can refer to [linux-tn-imx/drivers/media/i2c/Makefile](https://github.com/TechNexion/linux-tn-imx/blob/tn-imx_6.6.52_2.2.0-stable/drivers/media/i2c/Makefile)
+> [!NOTE]
+> you can refer to [linux-tn-imx/drivers/media/i2c/Makefile](https://github.com/TechNexion/linux-tn-imx/blob/tn-imx_6.6.52_2.2.0-stable/drivers/media/i2c/Makefile)
 
 4. Modify Kconfig to add camera config.
 
@@ -145,8 +145,8 @@ If you want to build a Yocto Project image by yourself, TechNexion BSP release p
         TEVS camera sensor with a MIPI CSI-2 interface.
     ```
 
-    > [!NOTE]
-    > you can refer to [linux-tn-imx/drivers/media/i2c/Kconfig](https://github.com/TechNexion/linux-tn-imx/blob/tn-imx_6.6.52_2.2.0-stable/drivers/media/i2c/Kconfig)
+> [!NOTE]
+> you can refer to [linux-tn-imx/drivers/media/i2c/Kconfig](https://github.com/TechNexion/linux-tn-imx/blob/tn-imx_6.6.52_2.2.0-stable/drivers/media/i2c/Kconfig)
 
 5. Modify makefile to add device tree.
 
@@ -168,8 +168,8 @@ If you want to build a Yocto Project image by yourself, TechNexion BSP release p
     dtb-$(CONFIG_ARCH_MXC) += imx95-19x19-evk-tevs.dtb
     ```
 
-    > [!NOTE]
-    > you can refer to [linux-tn-imx/arch/arm64/boot/dts/freescale/Makefile](https://github.com/TechNexion/linux-tn-imx/blob/tn-imx_6.6.52_2.2.0-stable/arch/arm64/boot/dts/freescale/Makefile)
+> [!NOTE]
+> you can refer to [linux-tn-imx/arch/arm64/boot/dts/freescale/Makefile](https://github.com/TechNexion/linux-tn-imx/blob/tn-imx_6.6.52_2.2.0-stable/arch/arm64/boot/dts/freescale/Makefile)
 
 6. Compile the kernel & module driver.
 
