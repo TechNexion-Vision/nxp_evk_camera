@@ -34,27 +34,27 @@
 
 -  MINI-SAS Adaptor for **i.MX 8M Plus EVK**
 
-> Connect TEVS camera and MINI-SAS adaptor to **i.MX 8M Plus EVK**.
+    > Connect TEVS camera and MINI-SAS adaptor to **i.MX 8M Plus EVK**.
 
-<a href="https://www.technexion.com/shop/embedded-vision/mipi-csi2/evk/tevs-ar0144-c-s83-ir-nxp/" target="_blank">
- <img src="https://www.technexion.com/wp-content/uploads/2024/11/tevs-ar0144-c-s83-ir-nxp.png" width="400" height="400" />
-</a>
+    <a href="https://www.technexion.com/shop/embedded-vision/mipi-csi2/evk/tevs-ar0144-c-s83-ir-nxp/" target="_blank">
+    <img src="https://www.technexion.com/wp-content/uploads/2024/11/tevs-ar0144-c-s83-ir-nxp.png" width="240" />
+    </a>
 
 - TEV-RPI22 Adaotor for **i.MX 93 EVK**
 
-> Connect TEVS camera and TEV-RPI22 adaptor to **i.MX 93 EVK**.
+    > Connect TEVS camera and TEV-RPI22 adaptor to **i.MX 93 EVK**.
 
-<a href="https://www.technexion.com/products/embedded-vision/mipi-csi2/evk/tevs-ar0144-c-s83-ir-rpi22/" target="_blank">
- <img src="https://www.technexion.com/wp-content/uploads/2024/11/tevs-ar0144-c-s83-ir-rpi22.png" width="400" height="400" />
-</a>
+    <a href="https://www.technexion.com/products/embedded-vision/mipi-csi2/evk/tevs-ar0144-c-s83-ir-rpi22/" target="_blank">
+    <img src="https://www.technexion.com/wp-content/uploads/2024/11/tevs-ar0144-c-s83-ir-rpi22.png" width="240" />
+    </a>
 
 - MINI-SAS Adaptor for **i.MX 95 EVK**
 
-> Connect TEVS camera and MINI-SAS adaptor to **i.MX 95 EVK**.
+    > Connect TEVS camera and MINI-SAS adaptor to **i.MX 95 EVK**.
 
-<a href="https://www.technexion.com/shop/embedded-vision/mipi-csi2/evk/tevs-ar0144-c-s83-ir-nxp/" target="_blank">
- <img src="https://www.technexion.com/wp-content/uploads/2024/11/tevs-ar0144-c-s83-ir-nxp.png" width="400" height="400" />
-</a>
+    <a href="https://www.technexion.com/shop/embedded-vision/mipi-csi2/evk/tevs-ar0144-c-s83-ir-nxp/" target="_blank">
+    <img src="https://www.technexion.com/wp-content/uploads/2024/11/tevs-ar0144-c-s83-ir-nxp.png" width="240" />
+    </a>
 
 ### Method 1 - Using TechNexion Pre-built image
 
