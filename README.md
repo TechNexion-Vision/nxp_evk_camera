@@ -205,6 +205,11 @@ If you want to build a Yocto Project image by yourself, TechNexion BSP release p
 
 ### Start camera video stream via gstreamer
 
+> [!TIP]
+> i.MX 95 EVK is different from the others. <br/>
+> Please reference ["Setup the media controller before camera streaming"](https://developer.technexion.com/docs/nxp-imx95lpd5evk-19cm-board-tevs-camera-usage-guide#instructions-for-testing-camera)
+> to set camera up correctly.
+
 We can check whether camera have been link via v4l2 control command :
 
   ```shell
