@@ -231,6 +231,6 @@ Specify the capture device you just get and start Gstreamer to get video stream 
 ## Additional information
 
 [NXP 8MPLUSLPD4-EVK board TEVS Camera Usage Guide](https://developer.technexion.com/docs/nxp-8mpluslpd4-evk-board-tevs-camera-usage-guide) <br/>
-[NXP IMX93LPDDR4X-EVK board TEVS Camera Usage Guide](https://developer.technexion.com/docs/nxp-imx93lpddr4x-evk-board-tevs-camera-usage-guide)
-
+[NXP IMX93LPDDR4X-EVK board TEVS Camera Usage Guide](https://developer.technexion.com/docs/nxp-imx93lpddr4x-evk-board-tevs-camera-usage-guide) <br/>
+[NXP IMX95LPD5EVK-19CM board TEVS Camera Usage Guide](https://developer.technexion.com/docs/nxp-imx95lpd5evk-19cm-board-tevs-camera-usage-guide)
 <br/><br/>
