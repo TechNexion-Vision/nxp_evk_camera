@@ -24,7 +24,7 @@
 
 | **Camera Series** | **Products** |
 | --- | --- |
-| TEVS | TEVS-AR0144-C<br>TEVS-AR0145-M<br>TEVS-AR0234-C<br>TEVS-AR0521-C<br>TEVS-AR0522-C<br>TEVS-AR0522-M<br>TEVS-AR0821-C<br>TEVS-AR0822-C<br>TEVS-AR1335-C |
+| TEVS | TEVS-AR0144<br>TEVS-AR0145<br>TEVS-AR0234<br>TEVS-AR0521<br>TEVS-AR0522<br>TEVS-AR0821<br>TEVS-AR0822<br>TEVS-AR1335 |
 
 [More Camera Products Details...](https://www.technexion.com/products/embedded-vision)
 
