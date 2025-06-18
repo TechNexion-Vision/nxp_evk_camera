@@ -63,10 +63,10 @@ Choose the correct demo image that is compatible with the EVK board you have.
 
 Prebuilt demo images can be available for download via TechNexion's server.
 
-- [i.MX 8M Plus EVK](https://download.technexion.com/demo_software/EVK/NXP/IMX8MP-LPDDR4/imx8mp-lpddr4-evk_yocto-5.0-qt6_20241230.zip)
-- [i.MX 93 EVK](https://download.technexion.com/demo_software/EVK/NXP/IMX93-LPDDR4X/imx93-11x11-lpddr4x-evk_yocto-5.0-qt6_20241230.zip)
-- [i.MX 95 EVK](https://download.technexion.com/demo_software/EVK/NXP/IMX95-LPDDR5/imx95-19x19-lpddr5-evk_yocto-5.0-qt6_20241230.zip)
-
+- [i.MX 8M Plus EVK (IMX8MP-DDR4)](https://download.technexion.com/demo_software/EVK/NXP/IMX8MP-DDR4/archived/)
+- [i.MX 8M Plus EVK (IMX8MP-LPDDR4)](https://download.technexion.com/demo_software/EVK/NXP/IMX8MP-LPDDR4/archived/)
+- [i.MX 93 EVK (IMX93LPDDR4X-EVK)](https://download.technexion.com/demo_software/EVK/NXP/IMX93-LPDDR4X/archived/)
+- [i.MX 95 EVK (IMX95LPD5EVK-19CM))](https://download.technexion.com/demo_software/EVK/NXP/IMX95-LPDDR5/archived/)
 
 > [!TIP]
 > Ensure the boot mode is configured as **boot from SD card**. <br/>
@@ -207,7 +207,7 @@ If you want to build a Yocto Project image by yourself, TechNexion BSP release p
 
 > [!TIP]
 > i.MX 95 EVK is different from the others. <br/>
-> Please reference ["Setup the media controller before camera streaming"](https://developer.technexion.com/docs/nxp-imx95lpd5evk-19cm-board-tevs-camera-usage-guide#instructions-for-testing-camera)
+> Please reference ["Setup the media controller before camera streaming"](https://tn-docusaurus.vercel.app/docs/embedded-vision/tevs/usage-guides/nxp/nxp-imx95lpd5evk-19cm-board-tevs-camera-usage-guide#setup-the-media-controller-before-camera-streaming)
 > to set camera up correctly.
 
 We can check whether camera have been link via v4l2 control command :
@@ -235,7 +235,7 @@ Specify the capture device you just get and start Gstreamer to get video stream 
 
 ## Additional information
 
-[NXP 8MPLUSLPD4-EVK board TEVS Camera Usage Guide](https://developer.technexion.com/docs/nxp-8mpluslpd4-evk-board-tevs-camera-usage-guide) <br/>
-[NXP IMX93LPDDR4X-EVK board TEVS Camera Usage Guide](https://developer.technexion.com/docs/nxp-imx93lpddr4x-evk-board-tevs-camera-usage-guide) <br/>
-[NXP IMX95LPD5EVK-19CM board TEVS Camera Usage Guide](https://developer.technexion.com/docs/nxp-imx95lpd5evk-19cm-board-tevs-camera-usage-guide)
+[NXP 8MPLUSLPD4-EVK board TEVS Camera Usage Guide](https://tn-docusaurus.vercel.app/docs/embedded-vision/tevs/usage-guides/nxp/nxp-8mpluslpd4-evk-board-tevs-camera-usage-guide) <br/>
+[NXP IMX93LPDDR4X-EVK board TEVS Camera Usage Guide](https://tn-docusaurus.vercel.app/docs/embedded-vision/tevs/usage-guides/nxp/nxp-imx93lpddr4x-evk-board-tevs-camera-usage-guide) <br/>
+[NXP IMX95LPD5EVK-19CM board TEVS Camera Usage Guide](https://tn-docusaurus.vercel.app/docs/embedded-vision/tevs/usage-guides/nxp/nxp-imx95lpd5evk-19cm-board-tevs-camera-usage-guide)
 <br/><br/>
