@@ -9,7 +9,7 @@
 
 ## Overview
 This repository contains the source code and device tree of the TechNexion MIPI-CSI2 embedded cameras module.<br/>
-You can find our camera products here：[MIPI-CSI2 Camera Module](https://www.technexion.com/products/embedded-vision/mipi-csi2/)
+You can find our camera products here：[TechNexion Embedded Vision Solutions](https://www.technexion.com/products/embedded-vision)
 
 ## Supported System-on-Module (SOM)
 + **NXP i.MX 8M**
@@ -18,12 +18,11 @@ You can find our camera products here：[MIPI-CSI2 Camera Module](https://www.te
 + **NXP i.MX 8M Nano**
 + **NXP i.MX 8M Quad**
 + **NXP i.MX 93**
++ **NXP i.MX 95**
 
 ## Supported carrier boards
 This release have been tested with:
-+ **NXP i.MX 8M Plus EVK**： [8MPLUSLPD4-EVK](https://www.nxp.com/design/design-center/development-boards/i-mx-evaluation-and-development-boards/evaluation-kit-for-the-i-mx-8m-plus-applications-processor:8MPLUSLPD4-EVK)<br/>
-+ **NXP i.MX 93 EVK**： [MCIMX93-EVK](https://www.nxp.com/design/design-center/development-boards-and-designs/i-mx-evaluation-and-development-boards/i-mx-93-evaluation-kit:i.MX93EVK)<br/>
-+ **TechNexion’s Evaluation Kits**： [Evaluation Kits](https://www.technexion.com/products/system-on-modules/evk/)<br/>
++ [TEVS Camera Usage Guide for NXP](https://tn-docusaurus.vercel.app/docs/embedded-vision/tevs/usage-guides/nxp/) <br/>
 
 ## Get started
 Using MIPI CSI-2 cameras requires setting up your embedded board.
