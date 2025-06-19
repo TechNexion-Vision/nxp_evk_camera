@@ -20,14 +20,9 @@ You can find our camera products here：[TechNexion Embedded Vision Solutions](h
 + **NXP i.MX 93**
 + **NXP i.MX 95**
 
-## Supported carrier boards
-This release have been tested with:
-+ [TEVS Camera Usage Guide for NXP](https://tn-docusaurus.vercel.app/docs/embedded-vision/tevs/usage-guides/nxp/) <br/>
+## Supported carrier boards and Get started
 
-## Get started
-Using MIPI CSI-2 cameras requires setting up your embedded board.
-You can following the [README] in branch to get started with the SD card image or the precompiled kernel including camera module driver.
-
+You can follow [TEVS Camera Usage Guide for NXP](https://tn-docusaurus.vercel.app/docs/embedded-vision/tevs/usage-guides/nxp/) and select the carrier board which you are using, get start to build yocto or use the pre-build kernel image including camera module driver.
 
  <br/>
  <br/>
