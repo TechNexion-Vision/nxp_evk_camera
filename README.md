@@ -22,7 +22,7 @@ You can find our camera products here：[TechNexion Embedded Vision Solutions](h
 
 ## Supported carrier boards and Get started
 
-You can follow [TEVS Camera Usage Guide for NXP](https://tn-docusaurus.vercel.app/docs/embedded-vision/tevs/usage-guides/nxp/) and select the carrier board which you are using, get start to build yocto or use the pre-build kernel image including camera module driver.
+You can follow [TEVS Camera Usage Guide for NXP](https://developer.technexion.com/docs/category/nxp) and select the carrier board which you are using, get start to build yocto or use the pre-build kernel image including camera module driver.
 
  <br/>
  <br/>
