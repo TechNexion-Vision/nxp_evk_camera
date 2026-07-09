@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 /*
  * Copyright 2026 TechNexion Ltd.
  *
@@ -43,7 +43,6 @@
 
 		reset-gpios   = <&adp5585 0 GPIO_ACTIVE_HIGH>;
 		standby-gpios = <&pca9554_a27_0 6 GPIO_ACTIVE_HIGH>;
-
 
 		port {
 			tevs_ep: endpoint {
