@@ -91,6 +91,8 @@
 		reset-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
 		standby-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
 
+		csi_id = <0>;
+
 		port {
 			tevs_0_ep: endpoint {
 				remote-endpoint = <&mipi_csi0_ep>;
@@ -119,6 +121,8 @@
 		host-power-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
 		reset-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
 		standby-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+
+		csi_id = <1>;
 
 		port {
 			tevs_1_ep: endpoint {

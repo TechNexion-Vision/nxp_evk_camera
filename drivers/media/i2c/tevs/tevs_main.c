@@ -637,11 +637,9 @@ static int tevs_set_frame_interval(struct v4l2_subdev *sub_dev,
 		tevs_sensor_table[tevs->selected_sensor]
 			.res_list[tevs->selected_mode]
 			.framerates
-				[ARRAY_SIZE(
-					 tevs_sensor_table[tevs->selected_sensor]
+				[tevs_sensor_table[tevs->selected_sensor]
 						 .res_list[tevs->selected_mode]
-						 .framerates) -
-				 1];
+						 .framerates_size - 1];
 
 	if (fps > max_fps)
 		fps = max_fps;
@@ -920,31 +918,25 @@ static int tevs_enum_frame_interval(struct v4l2_subdev *sub_dev,
 				    struct v4l2_subdev_frame_interval_enum *fie)
 {
 	struct tevs *tevs = container_of(sub_dev, struct tevs, v4l2_subdev);
+	struct sensor_info *sensor = &tevs_sensor_table[tevs->selected_sensor];
 	int i;
 
-	if ((fie->pad != 0) ||
-	    (fie->index >= ARRAY_SIZE(tevs_sensor_table[tevs->selected_sensor]
-					      .res_list[fie->index]
-					      .framerates)))
+	if (fie->pad != 0)
 		return -EINVAL;
 
 	dev_dbg(sub_dev->dev, "%s() index [%u]\n", __func__, fie->index);
 
-	fie->interval.numerator = 1;
+	for (i = 0; i < sensor->res_list_size; i++) {
+		if (fie->width == sensor->res_list[i].width &&
+		    fie->height == sensor->res_list[i].height) {
+			if (fie->index >= sensor->res_list[i].framerates_size)
+				return -EINVAL;
 
-	for (i = 0; i < tevs_sensor_table[tevs->selected_sensor].res_list_size;
-	     i++) {
-		if (fie->width == tevs_sensor_table[tevs->selected_sensor]
-					  .res_list[i]
-					  .width &&
-		    fie->height == tevs_sensor_table[tevs->selected_sensor]
-					   .res_list[i]
-					   .height) {
+			fie->interval.numerator = 1;
 			fie->interval.denominator =
-				tevs_sensor_table[tevs->selected_sensor]
-					.res_list[i]
-					.framerates[fie->index];
-			break;
+				sensor->res_list[i].framerates[fie->index];
+
+			return 0;
 		}
 	}
 
