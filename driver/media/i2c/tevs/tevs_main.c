@@ -4,8 +4,8 @@
 #include <linux/i2c.h>
 #include <linux/init.h>
 #include <linux/kernel.h>
-#include <linux/math64.h>
 #include <linux/media.h>
+#include <linux/math64.h>
 #include <linux/mutex.h>
 #include <linux/regmap.h>
 #include <linux/regulator/consumer.h>
@@ -627,11 +627,9 @@ static int tevs_set_frame_interval(struct v4l2_subdev *sub_dev,
 		tevs_sensor_table[tevs->selected_sensor]
 			.res_list[tevs->selected_mode]
 			.framerates
-				[ARRAY_SIZE(
-					 tevs_sensor_table[tevs->selected_sensor]
+				[tevs_sensor_table[tevs->selected_sensor]
 						 .res_list[tevs->selected_mode]
-						 .framerates) -
-				 1];
+						 .framerates_size - 1];
 
 	if (fps > max_fps)
 		fps = max_fps;
@@ -883,9 +881,9 @@ static int tevs_enum_frame_interval(struct v4l2_subdev *sub_dev,
 	int i;
 
 	if ((fie->pad != 0) ||
-	    (fie->index >= ARRAY_SIZE(tevs_sensor_table[tevs->selected_sensor]
+	    (fie->index >= tevs_sensor_table[tevs->selected_sensor]
 					      .res_list[fie->index]
-					      .framerates)))
+					      .framerates_size))
 		return -EINVAL;
 
 	dev_dbg(sub_dev->dev, "%s() index [%u]\n", __func__, fie->index);
@@ -2096,10 +2094,10 @@ static int tevs_check_hwcfg(struct device *dev, struct tevs *tevs)
 	/* Check the link frequency set in device tree */
 	if (ep_cfg.nr_of_link_frequencies == 0)
 		tevs->data_frequency =
-			(u32)div_u64(TEVS_LINK_FREQUENCY_DEFAULT, 1000000ULL) * 2;
+			(u32)div_u64(TEVS_LINK_FREQUENCY_DEFAULT, 1000000) * 2;
 	else if (ep_cfg.nr_of_link_frequencies == 1)
 		tevs->data_frequency =
-			(u32)div_u64(ep_cfg.link_frequencies[0], 1000000ULL) * 2;
+			(u32)div_u64(ep_cfg.link_frequencies[0], 1000000) * 2;
 	else {
 		dev_err(dev, "invalid link frequencies %u on port\n",
 			ep_cfg.nr_of_link_frequencies);
